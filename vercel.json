@@ -1,0 +1,36 @@
+{
+ "$schema": "https://openapi.vercel.sh/vercel.json",
+ "framework": "nextjs",
+ "regions": ["hkg1"],
+ "cleanUrls": true,
+ "trailingSlash": false,
+ "headers": [
+ {
+ "source": "/_next/static/(.*)",
+ "headers": [
+ {
+ "key": "Cache-Control",
+ "value": "public, max-age=31536000, immutable"
+ }
+ ]
+ },
+ {
+ "source": "/favicon.ico",
+ "headers": [
+ {
+ "key": "Cache-Control",
+ "value": "public, max-age=86400, must-revalidate"
+ }
+ ]
+ },
+ {
+ "source": "/(.*)\\.(svg|png|jpg|jpeg|gif|webp|ico)$",
+ "headers": [
+ {
+ "key": "Cache-Control",
+ "value": "public, max-age=86400, must-revalidate"
+ }
+ ]
+ }
+ ]
+}

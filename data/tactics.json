@@ -1,0 +1,26 @@
+[
+  {
+    "id": "tactic_001",
+    "name": "大兵书·攻其不备",
+    "slot": "major",
+    "category": "输出",
+    "effect": "对处于控制状态的敌人伤害 +12%",
+    "appliesTo": "主将"
+  },
+  {
+    "id": "tactic_002",
+    "name": "大兵书·严阵以待",
+    "slot": "major",
+    "category": "防御",
+    "effect": "主将受到伤害降低 8%",
+    "appliesTo": "主将"
+  },
+  {
+    "id": "tactic_101",
+    "name": "小兵书·铁甲",
+    "slot": "minor",
+    "category": "防御",
+    "effect": "受到的兵刃伤害 -5%",
+    "appliesTo": "主将"
+  }
+]

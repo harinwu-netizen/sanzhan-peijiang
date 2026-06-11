@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #3a4a3a;
+  --color-bg-cream: #e8e0c8;
+  --color-accent-red: #c84141;
+  --color-accent-green: #5a8a5a;
+  --color-ink: #2a2a2a;
+  --color-ink-soft: #5a5a5a;
+  --color-card: #f5efd8;
+  --color-line: #c4b896;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-bg-cream: var(--color-bg-cream);
+  --color-accent-red: var(--color-accent-red);
+  --color-accent-green: var(--color-accent-green);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-card: var(--color-card);
+  --color-line: var(--color-line);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "PingFang SC",
+    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-serif: "Noto Serif SC", "STSong", "SimSun", serif;
+}
+
+@layer base {
+  html,
+  body {
+    background: #e8e0c8;
+    color: var(--color-ink);
+  }
+  body {
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+  a {
+    color: inherit;
+  }
+
+  /* === 移动端响应式全局规则(S5) === */
+  /* 1. 防止 iOS Safari 旋转 / 字号放大导致布局漂移 */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  /* 2. 平滑滚动 + 触摸滚动惯性 */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* 3. 表单元素继承字体(避免 iOS 缩放) */
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+}
+
+/* === 触摸目标优化(44x44px 是 Apple HIG / WCAG 推荐的最小触摸目标) === */
+@layer components {
+  /* 链接 / 按钮触摸区至少 44x44(用 min-h/min-w,内容溢出不影响) */
+  a.touch-target,
+  button.touch-target,
+  .touch-target {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+/* === < 640px(手机竖屏)— 触摸优化 + 防 iOS 文字自动放大 === */
+@media (max-width: 640px) {
+  /* 16px 是 iOS 触发自动放大的临界,所有输入框 ≥ 16px 防止缩放 */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  /* 单行 <select> 在 iOS 上点击会全屏弹选择器,这里给最小可点击高度 */
+  select {
+    min-height: 2.75rem;
+  }
+  /* 触摸时短暂高亮(iOS Safari) */
+  a:active,
+  button:active,
+  [role="button"]:active,
+  [role="tab"]:active {
+    -webkit-tap-highlight-color: rgba(200, 65, 65, 0.15);
+  }
+}
+
+/* === 暗色模式偏好(可选,本任务不强制 — 仅给 prefers-color-scheme 一个优雅降级) === */
+@media (prefers-color-scheme: dark) {
+  /* 当前项目用 bg-cream 主题,暗色模式会导致对比度不足,这里主动禁用。
+     注释保留 — 后续若引入设计 token 暗色,在此处加 :root.dark {...} 规则。 */
+  html {
+    color-scheme: light;
+  }
+}
+
+/* === 减少动效偏好(无障碍) === */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

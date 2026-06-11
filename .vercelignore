@@ -1,0 +1,44 @@
+# Vercel deploy ignore list — exclude local debug / scratch files
+# Reference: https://vercel.com/docs/concepts/projects/ignoring-files
+
+# Build artifacts
+.next/
+.next/cache/
+out/
+build/
+
+# Local debug / scratch
+*.log
+*.tsbuildinfo
+.DS_Store
+
+# Test & coverage
+coverage/
+.vitest/
+test-results/
+
+# Local tooling
+.staging-backup/
+.tools/
+.mavis/
+.tmp/
+
+# Git
+.git/
+.gitignore
+
+# Node
+node_modules/
+node_modules/.cache/
+
+# Vercel internal (don't sync our own vercel state back up)
+.vercel/
+
+# Project-local docs / deliverables (these stay in repo, don't ship to vercel)
+deliverables/
+outputs/
+
+# Misc
+.cache/
+.idea/
+.vscode/

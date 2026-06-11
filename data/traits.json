@@ -1,0 +1,47 @@
+[
+  {
+    "id": "trait_zhao_yun_long_dan",
+    "name": "龙胆",
+    "ownerGeneralId": "zhao_yun",
+    "triggerCondition": "赵云施放自带战法时",
+    "effect": "伤害 +15%",
+    "source": "赵云专属装备附带",
+    "category": "攻击"
+  },
+  {
+    "id": "trait_crit",
+    "name": "暴击强化",
+    "ownerGeneralId": null,
+    "triggerCondition": "无",
+    "effect": "暴击率 +10%",
+    "source": "通用装备附带",
+    "category": "攻击"
+  },
+  {
+    "id": "trait_damage_reduce",
+    "name": "免伤强化",
+    "ownerGeneralId": null,
+    "triggerCondition": "无",
+    "effect": "受到伤害 -8%",
+    "source": "通用装备附带",
+    "category": "防御"
+  },
+  {
+    "id": "trait_strategy",
+    "name": "谋略强化",
+    "ownerGeneralId": null,
+    "triggerCondition": "无",
+    "effect": "谋略伤害 +10%",
+    "source": "通用装备附带",
+    "category": "谋略"
+  },
+  {
+    "id": "trait_initiative",
+    "name": "先手强化",
+    "ownerGeneralId": null,
+    "triggerCondition": "战斗开始前",
+    "effect": "首回合获得先手,速度 +10",
+    "source": "通用装备附带",
+    "category": "速度"
+  }
+]

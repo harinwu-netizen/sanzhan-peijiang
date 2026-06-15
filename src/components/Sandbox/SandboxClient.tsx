@@ -638,7 +638,7 @@ export function SandboxClient({
                     : "(选武将后生效)"
                 }
                 traitId={traitId}
-                trait={tr}
+                trait={tr ?? null}
                 options={traitsForGeneral(slot.generalId)}
                 onChange={(id) =>
                   updateSlot(col, { traitIds: id ? [id] : [] })

@@ -202,10 +202,12 @@ function SkillSelectPopover({
     };
   }, [open]);
 
-  const selected = useMemo(
-    () => filtered.find((o) => getId(o) === value),
-    [filtered, value],
-  );
+  const selected = useMemo(() => {
+    for (const o of filtered) {
+      if (getId(o) === value) return o;
+    }
+    return null;
+  }, [filtered, value]);
 
   return (
     <>

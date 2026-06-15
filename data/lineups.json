@@ -10,14 +10,13 @@
       "zhang_fei": 0,
       "guan_yu": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "spear",
     "skills": {
       "main": {
         "liu_bei": [
+          "wu_feng_zhen",
           "ren_de_zai_shi",
-          "yi_xin_zhao_yong",
-          "jie_li_zuo_mou"
+          "yi_xin_zhao_yong"
         ]
       },
       "vice": {
@@ -69,14 +68,13 @@
       "cao_cao": 0,
       "hao_zhao": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "shield",
     "skills": {
       "main": {
         "sima_yi": [
-          "gui_shi_chao_lun",
-          "wu_zhong_sheng_you",
-          "yi_xin_zhao_yong"
+          "ba_gua_zhen",
+          "gui_shen_mo_ce",
+          "yi_qi_li_ci"
         ]
       },
       "vice": {
@@ -103,7 +101,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "司马懿主将持续法伤,曹操分担伤害提供增伤,郝昭辅助补伤,魏国法盾代表。",
+    "description": "司马懿主将持续法伤,曹操分担伤害提供增伤,郝昭辅助补伤,魏国法盾代表。八卦阵克制谋略伤害,提升队伍稳定性。",
     "counters": ["shu_qiang", "wu_hu_qiang"],
     "counteredBy": ["wu_gong", "dong_wu_da_du_du"],
     "ratings": {
@@ -128,14 +126,13 @@
       "zhang_liao": 0,
       "xiahou_dun": 0
     },
-    "formationSkillId": "xi_liang_tie_qi",
     "troop": "cavalry",
     "skills": {
       "main": {
         "cao_cao": [
+          "feng_shi_zhen",
           "jian_jia_ling_yu",
-          "yi_xin_zhao_yong",
-          "jie_li_zuo_mou"
+          "yi_xin_zhao_yong"
         ]
       },
       "vice": {
@@ -162,7 +159,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "曹操主将增伤,张辽夏侯惇双输出,西凉铁骑骑兵爆发,经典魏国菜刀队。",
+    "description": "曹操主将增伤,张辽夏侯惇双输出,锋矢阵主将增伤副将分担,经典魏国菜刀队。",
     "counters": ["tao_yuan_dun", "wu_qi"],
     "counteredBy": ["wu_gong", "sima_yi_dun"],
     "ratings": {
@@ -187,14 +184,13 @@
       "guo_jia": 0,
       "cheng_yu": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "archer",
     "skills": {
       "main": {
         "xun_yu": [
+          "wu_feng_zhen",
           "yi_qi_li_ci",
-          "shen_feng_ju_ran",
-          "yi_xin_zhao_yong"
+          "shen_feng_ju_ran"
         ]
       },
       "vice": {
@@ -221,7 +217,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "荀彧主将增伤,郭嘉程昱双谋略输出,主打控制与持续法伤。",
+    "description": "荀彧主将增伤,郭嘉程昱双谋略输出,武峰阵分担伤害,主打控制与持续法伤。",
     "counters": ["shu_zhi", "jiang_wei_qiang"],
     "counteredBy": ["san_shi_lu", "sima_yi_dun"],
     "ratings": {
@@ -246,14 +242,13 @@
       "pang_tong": 0,
       "xu_shu": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "archer",
     "skills": {
       "main": {
         "zhuge_liang": [
-          "qi_xing_zhen",
+          "ba_gua_zhen",
           "kong_cheng_ji",
-          "yi_xin_zhao_yong"
+          "yi_qin_zhao_yong"
         ]
       },
       "vice": {
@@ -280,7 +275,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "诸葛亮主将法伤+控制,庞统徐庶双输出,蜀国法师队代表。",
+    "description": "诸葛亮主将法伤+控制,庞统徐庶双输出,八卦阵提升谋略打击面与减伤,蜀国法师队代表。",
     "counters": ["sima_yi_dun", "zhang_jiao_dun"],
     "counteredBy": ["wu_mou_chen", "qun_gong"],
     "ratings": {
@@ -305,13 +300,12 @@
       "zhang_fei": 0,
       "ma_chao": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "spear",
     "skills": {
       "main": {
         "zhao_yun": [
+          "wu_feng_zhen",
           "long_dan",
-          "yi_xin_zhao_yong",
           "heng_sao_qian_jun"
         ]
       },
@@ -339,7 +333,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "赵云主将连击+闪避,张飞马超双武力输出,五虎上将三人版枪兵。",
+    "description": "赵云主将连击+闪避,张飞马超双武力输出,武峰阵分担伤害,五虎上将三人版枪兵。",
     "counters": ["qun_xiong_qi", "wei_qi"],
     "counteredBy": ["sima_yi_dun", "wu_gong"],
     "ratings": {
@@ -364,12 +358,11 @@
       "wei_yan": 0,
       "guan_ping": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "spear",
     "skills": {
       "main": {
         "jiang_wei": [
-          "qi_xing_zhen",
+          "ba_gua_zhen",
           "jie_li_zuo_mou",
           "yi_xin_zhao_yong"
         ]
@@ -398,7 +391,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "姜维主将文武双全输出,魏延关平副将补刀,蜀国中坚枪兵。",
+    "description": "姜维主将文武双全输出,魏延关平副将补刀,八卦阵提升智谋打击面,蜀国中坚枪兵。",
     "counters": ["tao_yuan_dun", "wu_qi"],
     "counteredBy": ["wu_mou_chen", "shu_zhi"],
     "ratings": {
@@ -423,14 +416,13 @@
       "tai_shi_ci": 0,
       "gan_ning": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "archer",
     "skills": {
       "main": {
         "zhou_yu": [
+          "ba_gua_zhen",
           "shen_feng_ju_ran",
-          "huo_chi_yuan_liao",
-          "yi_xin_zhao_yong"
+          "huo_chi_yuan_liao"
         ]
       },
       "vice": {
@@ -457,7 +449,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "周瑜主将群体谋略+灼烧,太史慈甘宁双武力输出,吴弓代表队。",
+    "description": "周瑜主将群体谋略+灼烧,太史慈甘宁双武力输出,八卦阵提升谋略打击面,吴弓代表队。",
     "counters": ["sima_yi_dun", "zhang_jiao_dun"],
     "counteredBy": ["shu_qiang", "san_shi_lu"],
     "ratings": {
@@ -482,14 +474,13 @@
       "lu_xun": 0,
       "lu_su": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "archer",
     "skills": {
       "main": {
         "zhou_yu": [
+          "ba_gua_zhen",
           "shen_feng_ju_ran",
-          "huo_chi_yuan_liao",
-          "yi_xin_zhao_yong"
+          "huo_chi_yuan_liao"
         ]
       },
       "vice": {
@@ -516,7 +507,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "周瑜主将,陆逊鲁肃双副将,吴国都督队法伤组合。",
+    "description": "周瑜主将,陆逊鲁肃双副将,八卦阵提升智谋打击面与减伤,吴国都督队法伤组合。",
     "counters": ["sima_yi_dun", "shu_zhi"],
     "counteredBy": ["san_shi_lu", "qun_gong"],
     "ratings": {
@@ -541,14 +532,13 @@
       "zhou_tai": 0,
       "gan_ning": 0
     },
-    "formationSkillId": "xi_liang_tie_qi",
     "troop": "cavalry",
     "skills": {
       "main": {
         "sun_quan": [
-          "sun_quan_zi",
-          "yi_xin_zhao_yong",
-          "jie_li_zuo_mou"
+          "feng_shi_zhen",
+          "jian_xiong_zhen",
+          "yi_xin_zhao_yong"
         ]
       },
       "vice": {
@@ -575,7 +565,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "孙权主将增益,周泰甘宁副将输出,西凉铁骑骑兵菜刀。",
+    "description": "孙权主将增益,周泰甘宁副将输出,锋矢阵主将增伤副将分担,西凉铁骑骑兵菜刀。",
     "counters": ["tao_yuan_dun", "shu_qiang"],
     "counteredBy": ["wu_gong", "sima_yi_dun"],
     "ratings": {
@@ -600,14 +590,13 @@
       "chen_gong": 0,
       "hua_tuo": 0
     },
-    "formationSkillId": "san_shi_zheng",
     "troop": "cavalry",
     "skills": {
       "main": {
         "lv_bu": [
+          "da_yan_zhen",
           "wu_guo_zhong_li",
-          "po_zhen_cui_jian",
-          "heng_sao_qian_jun"
+          "po_zhen_cui_jian"
         ]
       },
       "vice": {
@@ -634,7 +623,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "吕布主将无双爆发,陈宫华佗副将辅助,三势阵主将概率提升。",
+    "description": "吕布主将无双爆发,陈宫华佗副将辅助,大雁阵副将先手减伤主将增伤,群雄菜刀队。",
     "counters": ["wu_gong", "shu_qiang"],
     "counteredBy": ["sima_yi_dun", "tao_yuan_dun"],
     "ratings": {
@@ -659,14 +648,13 @@
       "lv_bu": 0,
       "diao_chan": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "archer",
     "skills": {
       "main": {
         "dong_zhuo": [
+          "wu_feng_zhen",
           "jian_jia_ling_yu",
-          "yi_xin_zhao_yong",
-          "jie_li_zuo_mou"
+          "yi_xin_zhao_yong"
         ]
       },
       "vice": {
@@ -693,7 +681,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "董卓主将增伤+坦克,吕布副将输出,貂蝉控制,群雄混合弓。",
+    "description": "董卓主将增伤+坦克,吕布副将输出,貂蝉控制,武峰阵分担伤害,群雄混合弓。",
     "counters": ["shu_zhi", "dong_wu_da_du_du"],
     "counteredBy": ["san_shi_lu", "wu_hu_qiang"],
     "ratings": {
@@ -718,14 +706,13 @@
       "zuo_ci": 0,
       "hua_tuo": 0
     },
-    "formationSkillId": "xi_liang_tie_qi",
     "troop": "cavalry",
     "skills": {
       "main": {
         "lv_bu": [
+          "da_yan_zhen",
           "wu_guo_zhong_li",
-          "po_zhen_cui_jian",
-          "yi_xin_zhao_yong"
+          "po_zhen_cui_jian"
         ]
       },
       "vice": {
@@ -752,7 +739,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "吕布主将输出,左慈华佗双辅助治疗+增伤,群雄骑兵菜刀。",
+    "description": "吕布主将输出,左慈华佗双辅助治疗+增伤,大雁阵副将先手减伤主将增伤,群雄骑兵菜刀。",
     "counters": ["shu_qiang", "wu_qi"],
     "counteredBy": ["wu_hu_qiang", "sima_yi_dun"],
     "ratings": {
@@ -777,12 +764,11 @@
       "yu_ji": 0,
       "zuo_ci": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "shield",
     "skills": {
       "main": {
         "zhang_jiao": [
-          "wu_guo_zhong_li",
+          "wu_feng_zhen",
           "tai_ping_dao_fa",
           "yi_xin_zhao_yong"
         ]
@@ -811,7 +797,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "张角主将雷击+太平道法,于吉左慈副将法伤与治疗,群盾法师。",
+    "description": "张角主将雷击+太平道法,于吉左慈副将法伤与治疗,武峰阵分担伤害,群盾法师。",
     "counters": ["shu_qiang", "tao_yuan_dun"],
     "counteredBy": ["wu_gong", "shu_zhi"],
     "ratings": {
@@ -836,13 +822,12 @@
       "guan_yu": 0,
       "zhang_fei": 0
     },
-    "formationSkillId": "wu_feng_zhen",
     "troop": "shield",
     "skills": {
       "main": {
         "liu_bei": [
+          "wu_feng_zhen",
           "ren_de_zai_shi",
-          "yi_xin_zhao_yong",
           "gua_gu_liao_du"
         ]
       },
@@ -870,7 +855,7 @@
       ]
     },
     "equippedTraitIds": [],
-    "description": "桃园三兄弟盾兵版,刘备主将治疗+刮骨,关羽张飞副将输出,坦克续航强。",
+    "description": "桃园三兄弟盾兵版,刘备主将治疗+刮骨,关羽张飞副将输出,武峰阵分担伤害,坦克续航强。",
     "counters": ["san_shi_lu", "qun_xiong_qi"],
     "counteredBy": ["shu_qiang", "sima_yi_dun"],
     "ratings": {

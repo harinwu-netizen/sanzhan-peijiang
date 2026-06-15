@@ -1,19 +1,19 @@
 /**
- * lineups.json — 引用一致性测试(Sprint 4 兼容版)。
+ * lineups.json — 引用一致性测试(v6:阵法下沉到主将战法槽 0)。
  *
  * Sprint 4 阶段,generals.json / skills.json 的扩容由其他兄弟任务在做。
  * 本测试只对**当前已存在**的 ID 做严格校验:
- *   - generals.json 已有的 5 个武将 ID
- *   - skills.json 已有的 19 个战法 ID
- *   - tactics.json 已有的 3 个兵书 ID
+ *   - generals.json 已有的武将 ID
+ *   - skills.json 已有的战法 ID
+ *   - tactics.json 已有的兵书 ID
  *
- * 被 lineups 引用、但**当前 data 文件里没有**的 ID(Sprint 4/5 会加的
- * 武将/战法/tactics)直接跳过 — 不报错。
+ * 被 lineups 引用、但**当前 data 文件里没有**的 ID 直接跳过 — 不报错。
  *
- * 这样:
- *   - 当前 5 + 19 + 3 个 ID 的所有引用都有指向
- *   - 未来 data 扩容后,新 ID 自动进入"已存在"集合,新引用也会被校验
- *   - 不会出现"扩容还没做 → 测试就 fail"的循环依赖
+ * v6 增量校验:
+ *   - 主将战法槽 0(skills.main[generalIds[0]][0])必须指向 skills.json
+ *     中 subType=阵法 的战法。如果该 ID 当前不在 skills.json 中(未来
+ *     扩容会加),跳过 strict 校验。
+ *   - 旧 formationSkillId 字段已删除,references 测试不再校验它。
  */
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
@@ -34,6 +34,7 @@ describe('lineups.references — 加载数据', () => {
   let lineups: ReturnType<typeof LineupsFileSchema.parse>;
   let generalIds: Set<string>;
   let skillIds: Set<string>;
+  let skillMap: Map<string, { id: string; subType: string }>;
   let tacticIds: Set<string>;
 
   beforeAll(() => {
@@ -43,6 +44,7 @@ describe('lineups.references — 加载数据', () => {
     const tactics = loadJson('tactics.json', z.array(TacticsSchema));
     generalIds = new Set(generals.map((g) => g.id));
     skillIds = new Set(skills.map((s) => s.id));
+    skillMap = new Map(skills.map((s) => [s.id, { id: s.id, subType: s.subType }]));
     tacticIds = new Set(tactics.map((t) => t.id));
   });
 
@@ -51,7 +53,7 @@ describe('lineups.references — 加载数据', () => {
   });
 
   it('当前 generals.json 至少有 5 个武将 ID', () => {
-    // 守住"5 + 19 + 3 锚点":如果 data 文件被清空,这个测试先失败,提示
+    // 守住锚点:如果 data 文件被清空,这个测试先失败,提示
     // 兄弟任务回滚或本测试需要更新锚点。
     expect(generalIds.size).toBeGreaterThanOrEqual(5);
   });
@@ -79,20 +81,20 @@ describe('lineups.references — 加载数据', () => {
     }
   });
 
-  it('formationSkillId:阵法引用 — 新阵法跳过,已有阵法必存在', () => {
-    // 当前 data 里只有 wu_feng_zhen 一个阵法战法(subType=阵法),
-    // 以及 xi_liang_tie_qi 一个兵种战法。新阵容里可能引用尚未在 skills.json
-    // 出现的新阵法(如 san_shi_zheng),这些跳过。
+  // v6 新增:阵法槽一致性 — 主将战法槽 0 必须指向 subType=阵法 的战法
+  it('v6: 主将战法槽 0 = 已存在的阵法战法 ID', () => {
     for (const l of lineups) {
-      const fid = l.formationSkillId;
-      if (fid === null || fid === '') continue;
-      if (!skillIds.has(fid)) {
-        // 新阵法/新兵种,跳过
-        continue;
-      }
-      // 已存在:必须是阵法或兵种
-      // 注:这里不读 skills.json 全文,只确认 ID 存在
-      expect(skillIds.has(fid), `${l.id} formationSkillId ${fid}`).toBe(true);
+      const mainId = l.generalIds[0];
+      const slot0 = l.skills.main[mainId]?.[0];
+      expect(slot0, `${l.id} main[0] 必须存在`).toBeTruthy();
+      // 新阵法 ID 在当前 skills.json 不存在,跳过
+      if (!skillIds.has(slot0!)) continue;
+      const sk = skillMap.get(slot0!);
+      expect(sk, `${l.id} main[0]=${slot0} 缺失`).toBeDefined();
+      expect(
+        sk?.subType,
+        `${l.id} main[0]=${slot0} 应为阵法 subType,实际是 ${sk?.subType}`,
+      ).toBe('阵法');
     }
   });
 
@@ -102,7 +104,7 @@ describe('lineups.references — 加载数据', () => {
       for (const arr of Object.values(l.skills.main)) allSkillRefs.push(...arr);
       for (const arr of Object.values(l.skills.vice)) allSkillRefs.push(...arr);
       for (const sid of allSkillRefs) {
-        // 战法 ID 可能尚未在 skills.json 出现(Sprint 5 加),跳过即可
+        // 战法 ID 可能尚未在 skills.json 出现,跳过即可
         if (!skillIds.has(sid)) continue;
         expect(skillIds.has(sid), `${l.id} references missing skill ${sid}`).toBe(
           true,

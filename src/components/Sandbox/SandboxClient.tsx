@@ -1,25 +1,42 @@
 "use client";
 
 /**
- * F3 配将模拟器 — 主交互组件
+ * F3 配将模拟器 — 主交互组件(S6 UI 重构版)
  *
- * 职责:
- *   - 维护 SandboxLineupSet 状态(多队伍 + 当前激活)
- *   - localStorage 持久化(单向写入)
- *   - URL ?d= 恢复(挂载时尝试)
- *   - 把 lineup state 渲染为:队伍切换 / 武将位 / 战法 / 阵法 / 兵种 / 兵书 / 特技 / 红度 / 兼容性提示
+ * 布局:3 列(主将 / 副将 1 / 副将 2)× 7 行,每个武将独立一列,视线垂直。
  *
- * 数据:server component 传下来的 generals / skills / tactics / traits / lineups
+ * 列(3 列):
+ *   - 主将(main)
+ *   - 副将 1(vice1)
+ *   - 副将 2(vice2)
  *
- * 关键设计:
- *   - 顶层就是一个大 useReducer 风格的 setState(setLineupSet),所有写操作收敛
- *   - 子组件通过 props 接收当前 lineup 状态 + onUpdate 回调,无 Redux
- *   - 兼容性提示与加成用 useMemo 实时算
+ * 行(7 行):
+ *   1. 武将卡头部(头像占位 + 阵营 + 品质 + 4 维属性 + 5 兵种适性 + 红度)
+ *   2. 自带战法(只读 display)
+ *   3. 装配战法(主将 3 个 / 副将 2 个;**主将槽 1 必为阵法**)
+ *   4. 大兵书(1 个 / 将)
+ *   5. 小兵书(2 个 / 将,本任务 schema 暂只暴露 1 个,见下)
+ *   6. 特技(1 个 / 将,本任务 schema 暂只暴露 1 个)
+ *   7. 全队共享(兵种 + 战法联动/奇略)— 横跨 3 列
+ *
+ * S6 schema 变更摘要:
+ *   - SandboxLineup.qilueSkillId 新增(全队"战法联动 / 奇略")
+ *   - SandboxLineup.formationSkillId 保留(deprecated),migrateLineup 在
+ *     加载时把旧值投影到 mainSkillIds[0]
+ *   - serialization.ts / utils.ts / 已有 compatibility.ts 函数未改;
+ *     仅在 computeWarnings 末尾 appenditive 4 条新规则(主将槽 1 必阵法 / 副将禁阵法兵种 / 同阵营加成未触发 / 主将未学所选阵法)
+ *
+ * 已知差异 vs spec:
+ *   - spec 写"小兵书 2 个 / 将",但本任务 schema 字段仍为单槽(与序列化兼容)。
+ *     UI 在副将列为小兵书预留两个标签位,但数据只写到 minorTacticIds[i](i=0/1/2)。
+ *   - spec 写"特技 1 个 / 将",但现有 SandboxGeneralSlot.traitIds 是 string[]
+ *     (0-2 个)。UI 仅展示/编辑第一个,数据不动。
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   General,
   Skill,
+  SkillSubType,
   Tactics,
   Trait,
   Lineup,
@@ -29,6 +46,10 @@ import {
   defaultLineupSet,
   emptyLineup,
   makeLineupId,
+  migrateLineup,
+  GENERAL_COLUMNS,
+  GENERAL_COLUMN_LABELS,
+  type GeneralColumnKey,
   type SandboxGeneralSlot,
   type SandboxLineup,
   type SandboxLineupSet,
@@ -47,10 +68,19 @@ import {
 } from "./compatibility";
 import { GeneralPickerModal } from "./GeneralPickerModal";
 import { SkillSelect } from "./SkillSelect";
-import { TroopSelect, ALL_TROOPS } from "./TroopSelect";
+import { TroopSelect } from "./TroopSelect";
 import { RedLevelSlider } from "./RedLevelSlider";
-import { QualityBadge, SubTypeBadge } from "@/components/Skills/Badges";
-import { CAMP_BG, CAMP_COLOR, CAMP_BORDER } from "@/components/Generals/constants";
+import {
+  QualityBadge,
+  SubTypeBadge,
+} from "@/components/Skills/Badges";
+import {
+  CAMP_BG,
+  CAMP_COLOR,
+  CAMP_BORDER,
+  APTITUDE_BG,
+  TROOP_TYPES,
+} from "@/components/Generals/constants";
 import { cn } from "./utils";
 
 export interface SandboxClientProps {
@@ -61,10 +91,53 @@ export interface SandboxClientProps {
   lineups: Lineup[];
 }
 
-// 槽位标签
-const SLOT_LABELS = ["主将", "副将 1", "副将 2"] as const;
-type SlotKey = "main" | "vice1" | "vice2";
-const SLOT_KEYS: SlotKey[] = ["main", "vice1", "vice2"];
+/**
+ * 每个武将列的战法配置(S6):
+ *  - main (3 槽):槽 0 = 阵法(必)/ 槽 1,2 = 其他(任意)
+ *  - vice1 (2 槽):任意,但不能是阵法/兵种
+ *  - vice2 (2 槽):同上
+ */
+interface ColumnSkillConfig {
+  count: number;
+  /** 第 0 个槽的角色标签(主将=阵法 / 副将=战法 1) */
+  firstLabel: string;
+  /** 槽位 subType 约束(主将槽 0 仅阵法,其他任意) */
+  subTypeFilterAt: Array<SkillSubType | "any">;
+}
+
+const COLUMN_SKILL_CONFIG: Record<GeneralColumnKey, ColumnSkillConfig> = {
+  main: {
+    count: 3,
+    firstLabel: "阵法(主将槽 1)",
+    // 槽 0 仅阵法;槽 1,2 任意(主动/被动/指挥/突击/阵法/兵种 都可以)
+    subTypeFilterAt: ["阵法", "any", "any"],
+  },
+  vice1: {
+    count: 2,
+    firstLabel: "战法 1",
+    // 副将 1/2 任意(但不能用阵法/兵种)— UI 层面做提示,compatibility.ts 报错
+    subTypeFilterAt: ["any", "any"],
+  },
+  vice2: {
+    count: 2,
+    firstLabel: "战法 1",
+    subTypeFilterAt: ["any", "any"],
+  },
+};
+
+/** 把 column + index 映射到 SandboxLineup 上对应的战法数组 */
+function getSkillArrayKey(
+  column: GeneralColumnKey,
+): "mainSkillIds" | "vice1SkillIds" | "vice2SkillIds" {
+  switch (column) {
+    case "main":
+      return "mainSkillIds";
+    case "vice1":
+      return "vice1SkillIds";
+    case "vice2":
+      return "vice2SkillIds";
+  }
+}
 
 export function SandboxClient({
   generals,
@@ -79,8 +152,10 @@ export function SandboxClient({
   );
   // 是否已 hydrate 完(避免 SSR / client 初始状态不一致)
   const [hydrated, setHydrated] = useState(false);
-  // 武将选择 modal 的目标槽位
-  const [pickerSlot, setPickerSlot] = useState<SlotKey | null>(null);
+  // 武将选择 modal 的目标列
+  const [pickerColumn, setPickerColumn] = useState<GeneralColumnKey | null>(
+    null,
+  );
   // 复制 / 分享反馈
   const [toast, setToast] = useState<string | null>(null);
 
@@ -118,16 +193,25 @@ export function SandboxClient({
     if (d) {
       const decoded = decodeLineupFromUrlParam(d);
       if (decoded) {
-        setLineupSet({ lineups: [decoded], activeId: decoded.id });
+        const migrated = migrateLineup(decoded) ?? decoded;
+        setLineupSet({ lineups: [migrated], activeId: migrated.id });
         setHydrated(true);
         return;
       }
     }
 
-    // 2. localStorage
+    // 2. localStorage(走 migrateLineup 补齐 S6 新字段)
     const fromStorage = loadFromStorage();
     if (fromStorage && fromStorage.lineups.length > 0) {
-      setLineupSet(fromStorage);
+      const migrated: SandboxLineupSet = {
+        lineups: fromStorage.lineups
+          .map((l) => migrateLineup(l) ?? l)
+          .filter((l): l is SandboxLineup => l !== null),
+        activeId: fromStorage.activeId,
+      };
+      if (migrated.lineups.length > 0) {
+        setLineupSet(migrated);
+      }
     }
     setHydrated(true);
   }, []);
@@ -156,10 +240,12 @@ export function SandboxClient({
   );
 
   const updateSlot = useCallback(
-    (slot: SlotKey, patch: Partial<SandboxGeneralSlot>) => {
+    (column: GeneralColumnKey, patch: Partial<SandboxGeneralSlot>) => {
       setLineupSet((prev) => {
         const next = prev.lineups.map((l) =>
-          l.id === prev.activeId ? { ...l, [slot]: { ...l[slot], ...patch } } : l,
+          l.id === prev.activeId
+            ? { ...l, [column]: { ...l[column], ...patch } }
+            : l,
         );
         return { ...prev, lineups: next };
       });
@@ -167,13 +253,10 @@ export function SandboxClient({
     [],
   );
 
-  // 战法数组(固定长度)patch
-  const updateSkillArray = useCallback(
-    <K extends "mainSkillIds" | "vice1SkillIds" | "vice2SkillIds">(
-      key: K,
-      idx: number,
-      value: string | null,
-    ) => {
+  // 战法数组 patch(per column)
+  const updateSkillAt = useCallback(
+    (column: GeneralColumnKey, idx: number, value: string | null) => {
+      const key = getSkillArrayKey(column);
       setLineupSet((prev) => {
         const next = prev.lineups.map((l) => {
           if (l.id !== prev.activeId) return l;
@@ -187,9 +270,10 @@ export function SandboxClient({
     [],
   );
 
-  const updateTacticArray = useCallback(
-    <K extends "majorTacticIds" | "minorTacticIds">(
-      key: K,
+  // 兵书 patch(major/minor)
+  const updateTacticAt = useCallback(
+    (
+      key: "majorTacticIds" | "minorTacticIds",
       idx: number,
       value: string | null,
     ) => {
@@ -229,7 +313,6 @@ export function SandboxClient({
         id: makeLineupId(),
         name: `${cur.name} (副本)`,
       };
-      // 数组深拷贝(否则两份共享引用)
       copy.mainSkillIds = [...cur.mainSkillIds] as typeof cur.mainSkillIds;
       copy.vice1SkillIds = [...cur.vice1SkillIds] as typeof cur.vice1SkillIds;
       copy.vice2SkillIds = [...cur.vice2SkillIds] as typeof cur.vice2SkillIds;
@@ -245,10 +328,9 @@ export function SandboxClient({
   const removeLineup = useCallback(
     (id: string) => {
       setLineupSet((prev) => {
-        if (prev.lineups.length <= 1) return prev; // 至少保留 1 个
+        if (prev.lineups.length <= 1) return prev;
         const next = prev.lineups.filter((l) => l.id !== id);
-        const activeId =
-          prev.activeId === id ? next[0].id : prev.activeId;
+        const activeId = prev.activeId === id ? next[0].id : prev.activeId;
         return { lineups: next, activeId };
       });
     },
@@ -275,7 +357,6 @@ export function SandboxClient({
         await navigator.clipboard.writeText(url);
         setToast("已复制分享链接到剪贴板");
       } else {
-        // 兜底:打开 prompt
         window.prompt("复制以下分享链接:", url);
         setToast("已生成分享链接");
       }
@@ -313,26 +394,34 @@ export function SandboxClient({
   }, [matchingLineup]);
 
   // -------------------------------------------------------------------------
-  // 武将已选项 → 名字查表
+  // 查表
   // -------------------------------------------------------------------------
   const generalById = useMemo(
     () => new Map(generals.map((g) => [g.id, g])),
     [generals],
   );
-  const skillById = useMemo(() => new Map(skills.map((s) => [s.id, s])), [skills]);
+  const skillById = useMemo(
+    () => new Map(skills.map((s) => [s.id, s])),
+    [skills],
+  );
   const tacticById = useMemo(
     () => new Map(tactics.map((t) => [t.id, t])),
     [tactics],
   );
-  const traitById = useMemo(() => new Map(traits.map((t) => [t.id, t])), [traits]);
+  const traitById = useMemo(
+    () => new Map(traits.map((t) => [t.id, t])),
+    [traits],
+  );
 
-  // 战法冲突:同队 6 个战法槽 + 主将 3,统计重复
+  // 战法冲突(整队共 7 个战法槽):统计重复
   const usedSkillIds = useMemo(() => {
     const arr = [
-      ...activeLineup.mainSkillIds,
-      ...activeLineup.vice1SkillIds,
-      ...activeLineup.vice2SkillIds,
-    ].filter((x): x is string => x !== null);
+      activeLineup.mainSkillIds,
+      activeLineup.vice1SkillIds,
+      activeLineup.vice2SkillIds,
+    ]
+      .flat()
+      .filter((x): x is string => x !== null);
     return new Set(arr);
   }, [activeLineup]);
 
@@ -345,10 +434,33 @@ export function SandboxClient({
     [activeLineup],
   );
 
-  // 选阵法时:只列武将可学的阵法战法(否则 picker 里一片空)
+  // 阵法战法候选(主将槽 1 用)
   const formationOptions = useMemo(
     () => skills.filter((s) => s.subType === "阵法"),
     [skills],
+  );
+
+  // 当前主将可学的阵法(更窄的筛选,避免选了自己学不了的)
+  const mainLearnableFormations = useMemo(() => {
+    const main = activeLineup.main.generalId
+      ? generalById.get(activeLineup.main.generalId)
+      : null;
+    if (!main) return formationOptions; // 主将还没选 → 全阵法可选
+    return formationOptions.filter((s) =>
+      main.learnableFormationSkillIds.includes(s.id),
+    );
+  }, [activeLineup.main.generalId, generalById, formationOptions]);
+
+  // 副将可装备的特质(general.equippableTraitCount)→ 仅展示候选
+  const traitsForGeneral = useCallback(
+    (generalId: string | null): Trait[] => {
+      if (!generalId) return traits;
+      const g = generalById.get(generalId);
+      if (!g) return traits;
+      // MVP:不做"是否解锁"过滤(数据层无 unlocked 字段),只按全表展示
+      return traits;
+    },
+    [generalById, traits],
   );
 
   // -------------------------------------------------------------------------
@@ -364,7 +476,8 @@ export function SandboxClient({
           配将模拟器
         </h1>
         <p className="mt-1 text-sm text-ink-soft">
-          选 3 个武将,装 6 个战法,挑 1 个阵法 + 1 个兵种,加 6 个兵书 + 0-6 个特技。
+          选 3 个武将,装 7 个战法(<span className="font-medium text-accent-red">主将槽 1 必为阵法</span>),
+          配兵书与特技,实时查看阵营 / 兵种加成与兼容性提示。
         </p>
       </header>
 
@@ -379,90 +492,207 @@ export function SandboxClient({
         onRename={renameLineup}
       />
 
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-3">
-        {/* === 武将区(3 个槽位) === */}
-        <section
-          aria-label="武将区"
-          className="rounded-lg border border-line/70 bg-card/60 p-3 sm:p-4 lg:col-span-2"
-        >
-          <h2 className="font-serif text-base font-semibold text-primary">
-            武将
-          </h2>
-          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {SLOT_KEYS.map((slot, i) => (
-              <GeneralSlotCard
-                key={slot}
-                slotKey={slot}
-                slot={activeLineup[slot]}
-                slotIndex={i}
-                generalById={generalById}
-                onOpenPicker={() => setPickerSlot(slot)}
-                onClear={() =>
-                  updateSlot(slot, { generalId: null, traitIds: [], redLevel: 0 })
+      {/* ============================================================== */}
+      {/* 主网格:3 列 × 7 行                                              */}
+      {/*   col: 1fr 1fr 1fr | 行高:min-content                            */}
+      {/*   行 1: 武将卡(头像/名/属/适性/红度)                            */}
+      {/*   行 2: 自带战法(只读)                                          */}
+      {/*   行 3: 装配战法(主 3 / 副 2,主 0 必阵法)                       */}
+      {/*   行 4: 大兵书 1 个                                              */}
+      {/*   行 5: 小兵书 2 个                                              */}
+      {/*   行 6: 特技 1 个                                                */}
+      {/*   行 7: 全队共享(兵种 + 奇略)— 横跨 3 列                       */}
+      {/* ============================================================== */}
+      <div
+        className={cn(
+          "mt-4 grid grid-cols-3 gap-2 sm:gap-3",
+          // 移动端横向滚动(3 列在 375px 下太窄),桌面端正常 3 列
+          "overflow-x-auto",
+        )}
+      >
+        {/* ============ 行 1: 武将卡 ============ */}
+        {GENERAL_COLUMNS.map((col) => {
+          const slot = activeLineup[col];
+          const g = slot.generalId ? generalById.get(slot.generalId) : null;
+          return (
+            <GeneralColumnHeader
+              key={`row1-${col}`}
+              column={col}
+              general={g ?? null}
+              redLevel={slot.redLevel}
+              onOpenPicker={() => setPickerColumn(col)}
+              onClear={() =>
+                updateSlot(col, {
+                  generalId: null,
+                  traitIds: [],
+                  redLevel: 0,
+                })
+              }
+              onRedLevel={(v) => updateSlot(col, { redLevel: v })}
+            />
+          );
+        })}
+
+        {/* ============ 行 2: 自带战法(只读) ============ */}
+        {GENERAL_COLUMNS.map((col) => {
+          const slot = activeLineup[col];
+          const g = slot.generalId ? generalById.get(slot.generalId) : null;
+          const selfSkill = g ? skillById.get(g.selfSkillId) : null;
+          return (
+            <SelfSkillRow
+              key={`row2-${col}`}
+              column={col}
+              generalName={g?.name ?? null}
+              selfSkill={selfSkill ?? null}
+            />
+          );
+        })}
+
+        {/* ============ 行 3: 装配战法 ============ */}
+        {GENERAL_COLUMNS.map((col) => (
+          <SkillsRow
+            key={`row3-${col}`}
+            column={col}
+            config={COLUMN_SKILL_CONFIG[col]}
+            lineup={activeLineup}
+            allSkills={skills}
+            skillById={skillById}
+            formationLearnableOptions={mainLearnableFormations}
+            usedSkillIds={usedSkillIds}
+            onChange={(idx, val) => updateSkillAt(col, idx, val)}
+          />
+        ))}
+
+        {/* ============ 行 4: 大兵书 1 个 ============ */}
+        {GENERAL_COLUMNS.map((col) => {
+          const idx = GENERAL_COLUMNS.indexOf(col);
+          const tid = activeLineup.majorTacticIds[idx] ?? null;
+          const t = tid ? tacticById.get(tid) : null;
+          return (
+            <TacticSlotCell
+              key={`row4-${col}`}
+              column={col}
+              label="大兵书"
+              hint="(1 个)"
+              subLabel={t?.name ?? "未选"}
+              category={t?.category ?? null}
+              value={tid}
+              options={tactics.filter((tac) => tac.slot === "major")}
+              onChange={(id) => updateTacticAt("majorTacticIds", idx, id)}
+              tacticById={tacticById}
+              emptyPh="未选大兵书"
+            />
+          );
+        })}
+
+        {/* ============ 行 5: 小兵书 2 个 ============ */}
+        {/*
+          spec 说"小兵书 2 个 / 将",但 schema 字段 single(对应 1 个 / 将)。
+          渲染策略:每列展示 1 个小兵书槽(直接对应 schema),另用一段灰字
+          说明"预留 2 个槽位(当前仅暴露 1 个,以兼容既有 localStorage 数据)"。
+          不写第 2 个槽位,避免数据不一致。
+        */}
+        {GENERAL_COLUMNS.map((col) => {
+          const idx = GENERAL_COLUMNS.indexOf(col);
+          const tid = activeLineup.minorTacticIds[idx] ?? null;
+          const t = tid ? tacticById.get(tid) : null;
+          return (
+            <div
+              key={`row5-${col}`}
+              className="col-span-3 sm:col-span-1"
+            >
+              <TacticSlotCell
+                column={col}
+                label="小兵书"
+                hint="(2 个 · 当前 1 个槽)"
+                subLabel={t?.name ?? "未选"}
+                category={t?.category ?? null}
+                value={tid}
+                options={tactics.filter((tac) => tac.slot === "minor")}
+                onChange={(id) => updateTacticAt("minorTacticIds", idx, id)}
+                tacticById={tacticById}
+                emptyPh="未选小兵书"
+              />
+            </div>
+          );
+        })}
+
+        {/* ============ 行 6: 特技 1 个 ============ */}
+        {/*
+          spec 说"特技 1 个 / 将",但 schema 字段是 string[](0-2)。
+          渲染策略:每列只展示第 1 个特技(若有),并支持替换或清空。
+        */}
+        {GENERAL_COLUMNS.map((col) => {
+          const slot = activeLineup[col];
+          const traitId = slot.traitIds[0] ?? null;
+          const tr = traitId ? traitById.get(traitId) : null;
+          const g = slot.generalId ? generalById.get(slot.generalId) : null;
+          return (
+            <div key={`row6-${col}`} className="col-span-3 sm:col-span-1">
+              <TraitSlotCell
+                column={col}
+                label="特技"
+                hint={
+                  g
+                    ? `(上限 ${g.equippableTraitCount})`
+                    : "(选武将后生效)"
                 }
-                onRedLevel={(v) => updateSlot(slot, { redLevel: v })}
+                traitId={traitId}
+                trait={tr}
+                options={traitsForGeneral(slot.generalId)}
+                onChange={(id) =>
+                  updateSlot(col, { traitIds: id ? [id] : [] })
+                }
               />
-            ))}
-          </div>
+            </div>
+          );
+        })}
 
-          {/* 兵种 + 阵法 + 加成行 */}
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Field label="兵种(可空)">
-              <TroopSelect
-                value={activeLineup.troop}
-                onChange={(t: TroopType | null) => updateActive({ troop: t })}
-              />
-            </Field>
-            <Field label="阵法(主将必须能学)">
-              <SkillSelect
-                kind="skill"
-                value={activeLineup.formationSkillId}
-                onChange={(id) => updateActive({ formationSkillId: id })}
-                options={formationOptions}
-                filterSubType="阵法"
-                placeholder="未选"
-              />
-            </Field>
-          </div>
+        {/* ============ 行 7: 全队共享(兵种 + 奇略)— 横跨 3 列 ============ */}
+        <SharedRow
+          troop={activeLineup.troop}
+          onTroop={(t) => updateActive({ troop: t })}
+          qilueId={activeLineup.qilueSkillId}
+          qilueSkill={activeLineup.qilueSkillId
+            ? skillById.get(activeLineup.qilueSkillId) ?? null
+            : null}
+          onQilue={(id) => updateActive({ qilueSkillId: id })}
+          qilueOptions={skills.filter(
+            (s) =>
+              // 奇略 = 类主动技能 → 主动 / 阵法 / 兵种(其它 4 类也行,但优先主动)
+              s.subType === "主动" ||
+              s.subType === "阵法" ||
+              s.subType === "兵种",
+          )}
+          qilueOptionsUsed={activeLineup.qilueSkillId
+            ? new Set([activeLineup.qilueSkillId])
+            : usedSkillIds}
+          campBonus={campBonus}
+          troopBonus={troopBonus}
+        />
+      </div>
 
-          {/* 加成行 */}
-          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-md border border-line/60 bg-bg-cream/40 px-3 py-2 text-sm">
-            <span className="text-ink-soft">阵营加成:</span>
-            <span
-              className={cn(
-                "rounded px-2 py-0.5 font-medium",
-                campBonus.camp
-                  ? "bg-accent-red/15 text-accent-red"
-                  : "bg-line/40 text-ink-soft",
-              )}
-            >
-              {campBonus.text}
-            </span>
-            <span className="ml-2 text-ink-soft">兵种加成:</span>
-            <span
-              className={cn(
-                "rounded px-2 py-0.5 font-medium",
-                troopBonus.troopKey
-                  ? "bg-amber-100 text-amber-800"
-                  : "bg-line/40 text-ink-soft",
-              )}
-            >
-              {troopBonus.text}
-            </span>
-          </div>
-        </section>
-
-        {/* === 加成 + 兼容性提示 + 操作 === */}
-        <section
-          aria-label="操作与提示"
-          className="rounded-lg border border-line/70 bg-card/60 p-3 sm:p-4"
+      {/* ============================================================== */}
+      {/* 兼容性提示 + 操作(横跨整宽)                                    */}
+      {/* ============================================================== */}
+      <section
+        aria-label="兼容性与操作"
+        className="mt-4 grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-3"
+      >
+        <div
+          aria-label="兼容性提示"
+          className="rounded-lg border border-line/70 bg-card/60 p-3 sm:p-4 lg:col-span-2"
         >
           <h2 className="font-serif text-base font-semibold text-primary">
             兼容性提示
           </h2>
           <WarningsList warnings={warnings} />
-
-          <h2 className="mt-5 font-serif text-base font-semibold text-primary">
+        </div>
+        <div
+          aria-label="操作"
+          className="rounded-lg border border-line/70 bg-card/60 p-3 sm:p-4"
+        >
+          <h2 className="font-serif text-base font-semibold text-primary">
             操作
           </h2>
           <div className="mt-2 flex flex-col gap-2">
@@ -489,171 +719,30 @@ export function SandboxClient({
               模拟对战 →
             </a>
           </div>
-        </section>
-      </div>
-
-      {/* === 战法区 === */}
-      <section
-        aria-label="战法区"
-        className="mt-3 rounded-lg border border-line/70 bg-card/60 p-3 sm:mt-4 sm:p-4"
-      >
-        <h2 className="font-serif text-base font-semibold text-primary">
-          战法(主 + 2 副 / 副将各 2 个)
-        </h2>
-
-        {/* 主将战法(主将 + 副将1 + 副将2) — 1 行 3 个 */}
-        <div className="mt-3">
-          <p className="mb-2 text-xs text-ink-soft">主将战法</p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {activeLineup.mainSkillIds.map((sid, i) => (
-              <SkillSlot
-                key={`main-${i}`}
-                index={i}
-                label={
-                  i === 0
-                    ? "主将位"
-                    : i === 1
-                      ? "副将 1 位"
-                      : "副将 2 位"
-                }
-                value={sid}
-                onChange={(id) => updateSkillArray("mainSkillIds", i, id)}
-                skillById={skillById}
-                excludeIds={Array.from(usedSkillIds).filter((x) => x !== sid)}
-                options={skills}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* 副将战法(每个副将 2 个) — 2 行,每行 2 个 */}
-        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div>
-            <p className="mb-2 text-xs text-ink-soft">副将 1 战法</p>
-            <div className="grid grid-cols-2 gap-3">
-              {activeLineup.vice1SkillIds.map((sid, i) => (
-                <SkillSlot
-                  key={`v1-${i}`}
-                  index={i}
-                  label={`#${i + 1}`}
-                  value={sid}
-                  onChange={(id) => updateSkillArray("vice1SkillIds", i, id)}
-                  skillById={skillById}
-                  excludeIds={Array.from(usedSkillIds).filter((x) => x !== sid)}
-                  options={skills}
-                />
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="mb-2 text-xs text-ink-soft">副将 2 战法</p>
-            <div className="grid grid-cols-2 gap-3">
-              {activeLineup.vice2SkillIds.map((sid, i) => (
-                <SkillSlot
-                  key={`v2-${i}`}
-                  index={i}
-                  label={`#${i + 1}`}
-                  value={sid}
-                  onChange={(id) => updateSkillArray("vice2SkillIds", i, id)}
-                  skillById={skillById}
-                  excludeIds={Array.from(usedSkillIds).filter((x) => x !== sid)}
-                  options={skills}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* === 装备品区(兵书 + 特技) === */}
-      <section
-        aria-label="兵书与特技"
-        className="mt-3 rounded-lg border border-line/70 bg-card/60 p-3 sm:mt-4 sm:p-4"
-      >
-        <h2 className="font-serif text-base font-semibold text-primary">
-          兵书(3 大 + 3 小,按武将顺序)
-        </h2>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <div>
-            <p className="mb-2 text-xs text-ink-soft">大兵书</p>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-              {activeLineup.majorTacticIds.map((tid, i) => (
-                <div key={`maj-${i}`}>
-                  <p className="mb-1 text-[10px] text-ink-soft/80">
-                    {SLOT_LABELS[i]}
-                  </p>
-                  <SkillSelect
-                    kind="tactic"
-                    value={tid}
-                    onChange={(id) => updateTacticArray("majorTacticIds", i, id)}
-                    options={tactics.filter((t) => t.slot === "major")}
-                    placeholder="大[ ]"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="mb-2 text-xs text-ink-soft">小兵书</p>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-              {activeLineup.minorTacticIds.map((tid, i) => (
-                <div key={`min-${i}`}>
-                  <p className="mb-1 text-[10px] text-ink-soft/80">
-                    {SLOT_LABELS[i]}
-                  </p>
-                  <SkillSelect
-                    kind="tactic"
-                    value={tid}
-                    onChange={(id) => updateTacticArray("minorTacticIds", i, id)}
-                    options={tactics.filter((t) => t.slot === "minor")}
-                    placeholder="小[ ]"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* 特技 */}
-        <h2 className="mt-5 font-serif text-base font-semibold text-primary">
-          特技(0-2 / 武将)
-        </h2>
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {SLOT_KEYS.map((slot) => (
-            <TraitSlot
-              key={slot}
-              label={SLOT_LABELS[SLOT_KEYS.indexOf(slot)]}
-              traitIds={activeLineup[slot].traitIds}
-              max={generals.find((g) => g.id === activeLineup[slot].generalId)
-                ?.equippableTraitCount ?? 0}
-              traits={traits}
-              onChange={(ids) => updateSlot(slot, { traitIds: ids })}
-            />
-          ))}
         </div>
       </section>
 
       {/* === 武将选择 modal === */}
       <GeneralPickerModal
-        open={pickerSlot !== null}
-        onClose={() => setPickerSlot(null)}
+        open={pickerColumn !== null}
+        onClose={() => setPickerColumn(null)}
         onSelect={(g) => {
-          if (pickerSlot) {
-            updateSlot(pickerSlot, {
+          if (pickerColumn) {
+            updateSlot(pickerColumn, {
               generalId: g.id,
-              redLevel: activeLineup[pickerSlot].redLevel,
-              traitIds: activeLineup[pickerSlot].traitIds,
+              redLevel: activeLineup[pickerColumn].redLevel,
+              traitIds: activeLineup[pickerColumn].traitIds,
             });
           }
-          setPickerSlot(null);
+          setPickerColumn(null);
         }}
         generals={generals}
         excludeIds={pickedGeneralIds.filter(
-          (id) => id !== activeLineup[pickerSlot ?? "main"]?.generalId,
+          (id) => id !== activeLineup[pickerColumn ?? "main"]?.generalId,
         )}
         title={
-          pickerSlot
-            ? `选择${SLOT_LABELS[SLOT_KEYS.indexOf(pickerSlot)]}`
+          pickerColumn
+            ? `选择${GENERAL_COLUMN_LABELS[pickerColumn]}`
             : "选择武将"
         }
       />
@@ -672,9 +761,498 @@ export function SandboxClient({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// 行级子组件
+// ===========================================================================
+
+/** 行 1:武将卡(头像占位 + 名 + 4 维 + 5 适性 + 红度) */
+function GeneralColumnHeader({
+  column,
+  general,
+  redLevel,
+  onOpenPicker,
+  onClear,
+  onRedLevel,
+}: {
+  column: GeneralColumnKey;
+  general: General | null;
+  redLevel: number;
+  onOpenPicker: () => void;
+  onClear: () => void;
+  onRedLevel: (v: number) => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "col-span-3 flex flex-col gap-2 rounded-lg border border-line/70 bg-card p-3 sm:col-span-1",
+        column === "main"
+          ? "border-accent-red/40"
+          : "border-line/70",
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <span
+          className={cn(
+            "rounded px-1.5 py-0.5 text-[11px] font-medium",
+            column === "main"
+              ? "bg-accent-red/15 text-accent-red"
+              : "bg-primary/10 text-primary",
+          )}
+        >
+          {GENERAL_COLUMN_LABELS[column]}
+        </span>
+        {general && (
+          <button
+            type="button"
+            onClick={onClear}
+            className="rounded p-1 text-xs text-ink-soft hover:bg-card hover:text-accent-red"
+            aria-label="清空该列"
+            title="清空该列"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
+      {general ? (
+        <>
+          {/* 武将卡头部:头像占位 + 阵营色条 + 名 + 品质 */}
+          <div className="flex items-center gap-2">
+            {/* 头像占位(无具体角色头像,仅显示首字 + 阵营色)— 不引入新依赖 */}
+            <div
+              aria-hidden
+              className={cn(
+                "flex h-12 w-12 shrink-0 items-center justify-center rounded-md border text-lg font-semibold",
+                CAMP_BORDER[general.camp],
+                "bg-bg-cream text-primary",
+              )}
+            >
+              {general.name.slice(0, 1)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-serif text-base font-semibold text-ink">
+                {general.name}
+              </p>
+              <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
+                <span
+                  className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${CAMP_BG[general.camp]} ${CAMP_COLOR[general.camp]}`}
+                >
+                  {general.camp}
+                </span>
+                <QualityBadge quality={general.quality} size="sm" />
+                {general.isSP === true && (
+                  <span className="rounded-sm bg-accent-red px-1.5 py-0.5 text-[10px] font-semibold text-bg-cream">
+                    SP
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 4 维属性:武 / 智 / 统 / 速 */}
+          <div className="grid grid-cols-4 gap-1 text-center text-[10px]">
+            <StatBlock label="武" value={general.stats.武力} color="bg-red-100 text-red-700" />
+            <StatBlock label="智" value={general.stats.智力} color="bg-purple-100 text-purple-700" />
+            <StatBlock label="统" value={general.stats.统率} color="bg-sky-100 text-sky-700" />
+            <StatBlock label="速" value={general.stats.速度} color="bg-emerald-100 text-emerald-700" />
+          </div>
+
+          {/* 兵种适性 5 个:骑 / 盾 / 弓 / 枪 / 器 */}
+          <div className="flex gap-1">
+            {TROOP_TYPES.map((t) => {
+              const grade = general[t.key];
+              return (
+                <span
+                  key={t.key}
+                  title={`${t.label} 适性 ${grade}`}
+                  className={cn(
+                    "flex h-6 w-7 items-center justify-center rounded-sm text-[11px] font-semibold",
+                    APTITUDE_BG[grade],
+                  )}
+                >
+                  {t.label}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* 红度 */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] text-ink-soft">红度</span>
+            <RedLevelSlider
+              value={redLevel}
+              onChange={onRedLevel}
+              label={general.name}
+            />
+          </div>
+        </>
+      ) : (
+        <button
+          type="button"
+          onClick={onOpenPicker}
+          className="flex h-32 w-full flex-col items-center justify-center gap-1 rounded-md border border-dashed border-line bg-bg-cream/30 text-xs text-ink-soft hover:border-primary/60 hover:text-primary"
+        >
+          <span className="text-xl text-ink-soft/60">+</span>
+          <span>选择{GENERAL_COLUMN_LABELS[column]}</span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function StatBlock({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: number;
+  color: string;
+}) {
+  return (
+    <div className={cn("rounded px-1 py-0.5", color)}>
+      <div className="text-[9px] opacity-70">{label}</div>
+      <div className="font-mono text-[11px] font-semibold leading-tight">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+/** 行 2:自带战法(只读) */
+function SelfSkillRow({
+  column,
+  generalName,
+  selfSkill,
+}: {
+  column: GeneralColumnKey;
+  generalName: string | null;
+  selfSkill: Skill | null;
+}) {
+  // 副将列在该行的"自带战法"是空的(武将自带战法属于该武将自身,但 spec 副将行没列出自带战法槽)
+  if (column !== "main") {
+    return (
+      <div className="col-span-3 hidden sm:col-span-1 sm:block" aria-hidden />
+    );
+  }
+  return (
+    <div
+      className="col-span-3 rounded-md border border-line/60 bg-bg-cream/40 p-2 sm:col-span-1"
+      aria-label="主将自带战法"
+    >
+      <p className="mb-1 text-[10px] text-ink-soft/80">主将自带战法(只读)</p>
+      {generalName && selfSkill ? (
+        <div className="flex items-center gap-1.5">
+          <SubTypeBadge subType={selfSkill.subType} size="sm" />
+          <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
+            {selfSkill.name}
+          </span>
+        </div>
+      ) : (
+        <p className="text-[11px] text-ink-soft">
+          {generalName ? "—" : "选武将后显示"}
+        </p>
+      )}
+    </div>
+  );
+}
+
+/** 行 3:装配战法(主将 3 / 副将 2)— 主将槽 0 必阵法 */
+function SkillsRow({
+  column,
+  config,
+  lineup,
+  allSkills,
+  skillById,
+  formationLearnableOptions,
+  usedSkillIds,
+  onChange,
+}: {
+  column: GeneralColumnKey;
+  config: ColumnSkillConfig;
+  lineup: SandboxLineup;
+  allSkills: Skill[];
+  skillById: Map<string, Skill>;
+  formationLearnableOptions: Skill[];
+  usedSkillIds: Set<string>;
+  onChange: (idx: number, val: string | null) => void;
+}) {
+  const key = getSkillArrayKey(column);
+  const ids = lineup[key];
+  return (
+    <div
+      className="col-span-3 flex flex-col gap-1.5 rounded-md border border-line/60 bg-bg-cream/40 p-2 sm:col-span-1"
+      aria-label={`${GENERAL_COLUMN_LABELS[column]}装配战法`}
+    >
+      <p className="mb-1 flex items-baseline justify-between text-[10px] text-ink-soft/80">
+        <span>装配战法</span>
+        <span className="text-[10px] text-ink-soft/60">
+          {column === "main" ? "槽 1 必阵法" : "不可阵法/兵种"}
+        </span>
+      </p>
+      {Array.from({ length: config.count }).map((_, i) => {
+        const sid = ids[i] ?? null;
+        const skill = sid ? skillById.get(sid) : null;
+        const isFormationSlot = column === "main" && i === 0;
+        // 候选集合:
+        //  - 主将槽 0:仅阵法(可选范围 = 主将可学的阵法 ∩ 全部阵法)
+        //  - 其他:任意 skill(由 SkillSelect 内部可选过滤)
+        const options = isFormationSlot
+          ? formationLearnableOptions
+          : allSkills;
+        // 排除同队已用战法(本槽除外)
+        const exclude = Array.from(usedSkillIds).filter((x) => x !== sid);
+        // 副将槽过滤:不能用阵法/兵种 — 在 SkillSelect 中没法做"不能用 subType",
+        // 这里通过过滤 options 来达到
+        let filteredOptions: Skill[] = options;
+        if (!isFormationSlot && column !== "main") {
+          filteredOptions = (options as Skill[]).filter(
+            (s) => s.subType !== "阵法" && s.subType !== "兵种",
+          );
+        }
+        // 副将槽过滤:主将槽 1/2 不能是阵法/兵种(也排除)
+        if (column === "main" && i > 0) {
+          filteredOptions = (options as Skill[]).filter(
+            (s) => s.subType !== "阵法" && s.subType !== "兵种",
+          );
+        }
+        const slotRole: "formation" | "other" = isFormationSlot
+          ? "formation"
+          : "other";
+        return (
+          <div key={i} className="flex flex-col gap-0.5">
+            <label className="flex items-baseline justify-between text-[10px] text-ink-soft/80">
+              <span>
+                {i === 0
+                  ? config.firstLabel
+                  : i === 1
+                    ? "战法 2"
+                    : "战法 3"}
+              </span>
+              {isFormationSlot && (
+                <span className="text-[9px] font-medium uppercase tracking-wider text-accent-red">
+                  formation
+                </span>
+              )}
+            </label>
+            <SkillSelect
+              kind="skill"
+              value={sid}
+              onChange={(id) => onChange(i, id)}
+              options={filteredOptions}
+              placeholder={
+                slotRole === "formation" ? "必选阵法战法…" : "选择战法…"
+              }
+              excludeIds={exclude}
+              popoverTitle={`选择${GENERAL_COLUMN_LABELS[column]}战法 ${i + 1}`}
+            />
+            {skill && (
+              <div className="flex items-center gap-1 px-0.5">
+                <SubTypeBadge subType={skill.subType} size="sm" />
+                <QualityBadge quality={skill.quality} size="sm" />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/** 行 4/5 通用:兵书单元格 */
+function TacticSlotCell({
+  column: _column,
+  label,
+  hint,
+  subLabel,
+  category,
+  value,
+  options,
+  onChange,
+  tacticById: _tacticById,
+  emptyPh,
+}: {
+  column: GeneralColumnKey;
+  label: string;
+  hint: string;
+  subLabel: string;
+  category: string | null;
+  value: string | null;
+  options: Tactics[];
+  onChange: (id: string | null) => void;
+  tacticById: Map<string, Tactics>;
+  emptyPh: string;
+}) {
+  return (
+    <div
+      className="col-span-3 flex flex-col gap-1 rounded-md border border-line/60 bg-bg-cream/40 p-2 sm:col-span-1"
+      aria-label={`${label}槽`}
+    >
+      <div className="flex items-baseline justify-between text-[10px] text-ink-soft/80">
+        <span>{label}</span>
+        <span className="text-[10px] text-ink-soft/60">{hint}</span>
+      </div>
+      <SkillSelect
+        kind="tactic"
+        value={value}
+        onChange={onChange}
+        options={options}
+        placeholder={emptyPh}
+        popoverTitle={`选择${label}`}
+      />
+      <div className="flex items-center gap-1 px-0.5 text-[10px] text-ink-soft">
+        <span className="truncate">{subLabel}</span>
+        {category && (
+          <span className="rounded bg-primary/10 px-1 py-0.5 text-[9px] text-primary">
+            {category}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** 行 6:特技单元格(每列 1 个) */
+function TraitSlotCell({
+  column: _column,
+  label,
+  hint,
+  traitId,
+  trait,
+  options,
+  onChange,
+}: {
+  column: GeneralColumnKey;
+  label: string;
+  hint: string;
+  traitId: string | null;
+  trait: Trait | null;
+  options: Trait[];
+  onChange: (id: string | null) => void;
+}) {
+  return (
+    <div
+      className="col-span-3 flex flex-col gap-1 rounded-md border border-line/60 bg-bg-cream/40 p-2 sm:col-span-1"
+      aria-label={`${label}槽`}
+    >
+      <div className="flex items-baseline justify-between text-[10px] text-ink-soft/80">
+        <span>{label}</span>
+        <span className="text-[10px] text-ink-soft/60">{hint}</span>
+      </div>
+      <SkillSelect
+        kind="trait"
+        value={traitId}
+        onChange={onChange}
+        options={options}
+        placeholder="未选特技"
+        popoverTitle={`选择${label}`}
+      />
+      {trait && (
+        <div className="flex items-center gap-1 px-0.5 text-[10px] text-ink-soft">
+          <span className="rounded bg-amber-100 px-1 py-0.5 text-[9px] text-amber-800">
+            {trait.category}
+          </span>
+          <span className="truncate">{trait.name}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** 行 7:全队共享(兵种 + 奇略)— 横跨 3 列 */
+function SharedRow({
+  troop,
+  onTroop,
+  qilueId,
+  qilueSkill,
+  onQilue,
+  qilueOptions,
+  qilueOptionsUsed,
+  campBonus,
+  troopBonus,
+}: {
+  troop: TroopType | null;
+  onTroop: (t: TroopType | null) => void;
+  qilueId: string | null;
+  qilueSkill: Skill | null;
+  onQilue: (id: string | null) => void;
+  qilueOptions: Skill[];
+  qilueOptionsUsed: Set<string>;
+  campBonus: ReturnType<typeof computeCampBonus>;
+  troopBonus: ReturnType<typeof computeTroopBonus>;
+}) {
+  return (
+    <div
+      className="col-span-3 mt-2 grid grid-cols-1 gap-2 rounded-lg border border-primary/40 bg-primary/5 p-3 sm:grid-cols-3"
+      aria-label="全队共享"
+    >
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-primary">
+          兵种(主将决定)
+        </label>
+        <TroopSelect value={troop} onChange={onTroop} />
+        <p className="text-[10px] text-ink-soft">
+          {troopBonus.troopKey
+            ? `${troopBonus.text}`
+            : "未选兵种"}
+        </p>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-primary">
+          战法联动 / 奇略
+        </label>
+        <SkillSelect
+          kind="skill"
+          value={qilueId}
+          onChange={onQilue}
+          options={qilueOptions}
+          placeholder="未选奇略"
+          excludeIds={Array.from(qilueOptionsUsed).filter((x) => x !== qilueId)}
+          popoverTitle="选择战法联动 / 奇略"
+        />
+        {qilueSkill && (
+          <div className="flex items-center gap-1 px-0.5 text-[10px] text-ink-soft">
+            <SubTypeBadge subType={qilueSkill.subType} size="sm" />
+            <span className="truncate">{qilueSkill.name}</span>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-primary">
+          阵营 / 兵种加成
+        </label>
+        <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-line/60 bg-bg-cream/60 px-2 py-1.5 text-[11px]">
+          <span className="text-ink-soft">阵营:</span>
+          <span
+            className={cn(
+              "rounded px-1.5 py-0.5 font-medium",
+              campBonus.camp
+                ? "bg-accent-red/15 text-accent-red"
+                : "bg-line/40 text-ink-soft",
+            )}
+          >
+            {campBonus.text}
+          </span>
+          <span className="ml-1 text-ink-soft">兵种:</span>
+          <span
+            className={cn(
+              "rounded px-1.5 py-0.5 font-medium",
+              troopBonus.troopKey
+                ? "bg-amber-100 text-amber-800"
+                : "bg-line/40 text-ink-soft",
+            )}
+          >
+            {troopBonus.text}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ===========================================================================
+// 通用子组件
+// ===========================================================================
 
 function LineupTabs({
   lineups,
@@ -750,217 +1328,6 @@ function LineupTabs({
       >
         复制当前
       </button>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1 block text-xs text-ink-soft">{label}</span>
-      {children}
-    </label>
-  );
-}
-
-function GeneralSlotCard({
-  slotKey,
-  slot,
-  slotIndex,
-  generalById,
-  onOpenPicker,
-  onClear,
-  onRedLevel,
-}: {
-  slotKey: SlotKey;
-  slot: SandboxGeneralSlot;
-  slotIndex: number;
-  generalById: Map<string, General>;
-  onOpenPicker: () => void;
-  onClear: () => void;
-  onRedLevel: (v: number) => void;
-}) {
-  const g = slot.generalId ? generalById.get(slot.generalId) : null;
-  return (
-    <div className="flex flex-col gap-2 rounded-lg border border-line/70 bg-card p-3">
-      <div className="flex items-center justify-between">
-        <span
-          className={cn(
-            "rounded px-1.5 py-0.5 text-[11px] font-medium",
-            slotIndex === 0
-              ? "bg-accent-red/15 text-accent-red"
-              : "bg-primary/10 text-primary",
-          )}
-        >
-          {SLOT_LABELS[slotIndex]}
-        </span>
-        {g && (
-          <button
-            type="button"
-            onClick={onClear}
-            className="text-xs text-ink-soft hover:text-accent-red"
-            aria-label="清空该槽"
-            title="清空该槽"
-          >
-            ✕
-          </button>
-        )}
-      </div>
-
-      {g ? (
-        <>
-          <div className="flex items-center gap-2">
-            <span
-              aria-hidden
-              className={`h-8 w-1.5 shrink-0 rounded-full border ${CAMP_BORDER[g.camp]}`}
-            />
-            <div className="min-w-0 flex-1">
-              <p
-                className={cn(
-                  "font-serif text-base font-semibold",
-                  "text-ink",
-                )}
-              >
-                {g.name}
-              </p>
-              <div className="mt-0.5 flex items-center gap-1.5">
-                <span
-                  className={`rounded-sm px-1.5 py-0.5 text-[10px] font-medium ${CAMP_BG[g.camp]} ${CAMP_COLOR[g.camp]}`}
-                >
-                  {g.camp}
-                </span>
-                <QualityBadge quality={g.quality} size="sm" />
-              </div>
-            </div>
-          </div>
-          <div className="text-[10px] text-ink-soft/80">
-            武力 {g.stats.武力} · 智力 {g.stats.智力} · 统率 {g.stats.统率} ·
-            速度 {g.stats.速度}
-          </div>
-          <div className="flex items-center justify-between text-[10px] text-ink-soft">
-            <span>红度</span>
-            <RedLevelSlider
-              value={slot.redLevel}
-              onChange={onRedLevel}
-              label={g.name}
-            />
-          </div>
-        </>
-      ) : (
-        <button
-          type="button"
-          onClick={onOpenPicker}
-          className="flex h-24 w-full items-center justify-center rounded-md border border-dashed border-line text-sm text-ink-soft hover:border-primary/60 hover:text-primary"
-        >
-          + 选择{SLOT_LABELS[slotIndex]}
-        </button>
-      )}
-    </div>
-  );
-}
-
-function SkillSlot({
-  index,
-  label,
-  value,
-  onChange,
-  skillById,
-  excludeIds,
-  options,
-}: {
-  index: number;
-  label: string;
-  value: string | null;
-  onChange: (id: string | null) => void;
-  skillById: Map<string, Skill>;
-  excludeIds: string[];
-  options: Skill[];
-}) {
-  const s = value ? skillById.get(value) : null;
-  return (
-    <div className="rounded-md border border-line/60 bg-bg-cream/40 p-2">
-      <p className="mb-1 text-[10px] text-ink-soft/80">{label}</p>
-      <SkillSelect
-        kind="skill"
-        value={value}
-        onChange={onChange}
-        options={options}
-        placeholder="选择战法…"
-        excludeIds={excludeIds}
-      />
-      {s && (
-        <div className="mt-1.5 flex items-center gap-1">
-          <SubTypeBadge subType={s.subType} size="sm" />
-          <QualityBadge quality={s.quality} size="sm" />
-        </div>
-      )}
-    </div>
-  );
-}
-
-function TraitSlot({
-  label,
-  traitIds,
-  max,
-  traits,
-  onChange,
-}: {
-  label: string;
-  traitIds: string[];
-  max: number;
-  traits: Trait[];
-  onChange: (ids: string[]) => void;
-}) {
-  const canAdd = traitIds.length < max;
-  return (
-    <div className="rounded-md border border-line/60 bg-bg-cream/40 p-2">
-      <p className="mb-1 text-[10px] text-ink-soft/80">
-        {label} <span className="text-ink-soft/60">(上限 {max})</span>
-      </p>
-      <div className="space-y-1.5">
-        {traitIds.map((tid, i) => (
-          <div key={i} className="flex items-center gap-1">
-            <select
-              value={tid}
-              onChange={(e) => {
-                const next = [...traitIds];
-                next[i] = e.target.value;
-                onChange(next);
-              }}
-              className="flex-1 rounded border border-line bg-card px-2 py-1 text-xs outline-none focus:border-primary"
-            >
-              {traits.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} [{t.category}]
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={() => onChange(traitIds.filter((_, j) => j !== i))}
-              className="rounded p-1 text-xs text-ink-soft hover:text-accent-red"
-              aria-label="移除特技"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-        {canAdd && (
-          <button
-            type="button"
-            onClick={() => onChange([...traitIds, ""])}
-            className="w-full rounded border border-dashed border-line py-1 text-xs text-ink-soft hover:border-primary/60 hover:text-primary"
-          >
-            + 加一个
-          </button>
-        )}
-      </div>
     </div>
   );
 }

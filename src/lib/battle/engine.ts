@@ -20,6 +20,12 @@
  *
  * ⚠️ 此文件**只**依赖 src/lib/data/schemas 的类型,**不**读 fs,
  *    不依赖 React / Next.js API,可在浏览器直接运行。
+ *
+ * v6 阵法获取方式:
+ *   阵法在 v6 起被下沉到主将战法槽 0(skills.main[generalIds[0]][0])。
+ *   引擎不直接读 skills.json — 由调用方解析 Lineup 后,把
+ *   formationSkill(subType 必须为 '阵法' 才能生效)作为入参传给
+ *   buildBattleLineup()。若未传,默认无阵法。
  */
 import type { Lineup, SimConfig, TroopType } from "@/lib/data/schemas";
 
@@ -41,7 +47,10 @@ export interface BattleLineup {
   id: string;
   name: string;
   generals: BattleGeneral[];
-  formation: boolean; // 是否带阵法
+  /** v6:阵法 = 主将战法槽 0 是否为阵法 subType */
+  formation: boolean;
+  /** v6:阵法战法名(便于调试 / 输出) */
+  formationName: string | null;
   troop: TroopType | null;
 }
 
@@ -173,12 +182,50 @@ function lowestHpIdx(hp: number[]): number {
 // ---------------------------------------------------------------------------
 
 /**
+ * v6 起阵法从 `formationSkillId` 顶层字段下沉到
+ * `skills.main[generalIds[0]][0]`,引擎不直接读 skills.json。
+ * 调用方需要在传入 Lineup 时,先解析出主将战法槽 0 的阵法信息,
+ * 通过 `formationSkill` 参数告诉引擎:
+ *   - subType === '阵法' → 阵法生效(8% 全队增伤)
+ *   - subType !== '阵法' / 缺失 / null → 无阵法
+ *
+ * 不传 formationSkill 时,默认按"无阵法"处理(向后兼容)。
+ */
+export interface FormationSkill {
+  id: string;
+  name: string;
+  subType: string;
+}
+
+/**
+ * 从 Lineup 提取主将战法槽 0 的阵法(配合 skillMap 使用)。
+ * 这是一个便捷 helper,把"lineup + skillMap → FormationSkill|null"
+ * 集中在这里,调用方只需要把 skills.json 转成 Map<string, Skill> 传入即可。
+ */
+export function resolveFormationFromLineup(
+  lineup: Lineup,
+  skillMap: Map<string, FormationSkill>,
+): FormationSkill | null {
+  const mainId = lineup.generalIds[0];
+  if (!mainId) return null;
+  const slot0 = lineup.skills.main?.[mainId]?.[0];
+  if (!slot0) return null;
+  const sk = skillMap.get(slot0);
+  if (!sk) return null;
+  // 严格要求 subType = '阵法' — 兵种(西凉铁骑)/普通战法都返回 null
+  return sk.subType === '阵法' ? sk : null;
+}
+
+/**
  * 把 Lineup 简化成 BattleLineup:
  *   - 3 个 BattleGeneral 共享一份从 ratings 推算的 4 维
  *   - camp 默认 "蜀"(MVP:lineup 自身没有 camp 字段,只有武将决定)
- *   - 不读 skills/tactics/traits 细节(只决定有没有阵法 → 8% 全队增伤)
+ *   - 阵法判定:v6 由 formationSkill 参数决定(主将战法槽 0)
  */
-export function buildBattleLineup(lineup: Lineup): BattleLineup {
+export function buildBattleLineup(
+  lineup: Lineup,
+  formationSkill?: FormationSkill | null,
+): BattleLineup {
   const ratingTotal = lineup.ratings.total;
   const base = Math.max(40, Math.min(180, 80 + (ratingTotal - 50) * 1.6));
   const speed = Math.max(
@@ -203,11 +250,15 @@ export function buildBattleLineup(lineup: Lineup): BattleLineup {
     troop: lineup.troop,
   });
 
+  // v6:阵法 = formationSkill.subType === '阵法'(由调用方解析 main[0])
+  const formation = formationSkill?.subType === '阵法';
+
   return {
     id: lineup.id,
     name: lineup.name,
     generals: [mkGeneral(0), mkGeneral(1), mkGeneral(2)],
-    formation: Boolean(lineup.formationSkillId),
+    formation,
+    formationName: formation ? formationSkill!.name : null,
     troop: lineup.troop,
   };
 }
@@ -363,6 +414,9 @@ export interface SimulateInput {
   lineupB: Lineup;
   iterations: number;
   simConfig: SimConfig;
+  /** v6:阵法 = 主将战法槽 0。调用方解析后传进来 */
+  formationSkillA?: FormationSkill | null;
+  formationSkillB?: FormationSkill | null;
   /** 可选注入(单测用) */
   rng?: Rng;
   /** 可选进度回调(每 ~10% 报一次) */
@@ -380,6 +434,8 @@ export function simulate(input: SimulateInput): SimulateResult {
     lineupB,
     iterations,
     simConfig,
+    formationSkillA = null,
+    formationSkillB = null,
     rng = defaultRng,
     onProgress,
   } = input;
@@ -396,8 +452,8 @@ export function simulate(input: SimulateInput): SimulateResult {
     return emptyResult(Math.max(0, iterations), now() - start);
   }
 
-  const a = buildBattleLineup(lineupA);
-  const b = buildBattleLineup(lineupB);
+  const a = buildBattleLineup(lineupA, formationSkillA);
+  const b = buildBattleLineup(lineupB, formationSkillB);
 
   let winnerA = 0;
   let winnerB = 0;

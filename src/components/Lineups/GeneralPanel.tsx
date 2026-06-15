@@ -116,11 +116,15 @@ export function SkillAssignmentGrid({
         <ul className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {mainSkills.map((skillId, i) => {
             const skill = skillMap.get(skillId);
+            // v6:槽 0 必为阵法 — 用 subType 判断,缺数据兜底走 false
+            const isFormation =
+              i === 0 && (skill?.subType === "阵法" || skillId.length > 0);
             return (
               <li key={`${skillId}-${i}`}>
                 <SkillChip
                   skill={skill ?? { id: skillId, name: skillId, subType: "主动" }}
                   role={i === 0 ? "主" : "副"}
+                  isFormation={isFormation}
                 />
               </li>
             );
@@ -170,9 +174,12 @@ export function SkillAssignmentGrid({
 function SkillChip({
   skill,
   role,
+  isFormation = false,
 }: {
   skill: { id: string; name: string; subType: SkillSubType };
   role: "主" | "副";
+  /** v6:主将战法槽 0 = 阵法时显示特殊角标 */
+  isFormation?: boolean;
 }) {
   return (
     <Link
@@ -180,9 +187,19 @@ function SkillChip({
       className="group flex items-center justify-between gap-2 rounded-md border border-line/60 bg-bg-cream/40 px-3 py-2 transition-all hover:border-primary/60 hover:bg-card"
     >
       <div className="min-w-0">
-        <p className="truncate font-serif text-sm font-medium text-ink group-hover:text-primary">
-          {skill.name}
-        </p>
+        <div className="flex items-center gap-1.5">
+          <p className="truncate font-serif text-sm font-medium text-ink group-hover:text-primary">
+            {skill.name}
+          </p>
+          {isFormation && (
+            <span
+              className="shrink-0 rounded bg-purple-100 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-purple-700"
+              title="主将战法槽 0 — 阵法"
+            >
+              阵法
+            </span>
+          )}
+        </div>
         <p className="text-[10px] text-ink-soft/70">ID: {skill.id}</p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-0.5">

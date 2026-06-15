@@ -1,18 +1,24 @@
 /**
  * F7 模拟交战 — 战斗引擎单元测试
  *
- * 5 个测试:
+ * v6:阵法从 formationSkillId 顶层字段下沉到主将战法槽 0。
+ * 测试用例:
  *   1. 蜀枪 vs 蜀枪 → ~50% A 胜率(同队伍,应有对称)
  *   2. 1000 次迭代 < 3s(性能)
  *   3. 边界:lineup 缺数据不崩
  *   4. 5 档分级函数正确(纯函数,无 RNG)
  *   5. 5 档分布:从 gradeWinRate 反向计算分布
+ *   6. v6 新增:buildBattleLineup 接受 formationSkill,subType='阵法' 时 formation=true
+ *   7. v6 新增:resolveFormationFromLineup 主将战法槽 0 → 阵法识别
  */
 import { describe, it, expect } from "vitest";
 import {
   simulate,
+  buildBattleLineup,
+  resolveFormationFromLineup,
   gradeWinRate,
   gradeDistribution,
+  type FormationSkill,
   type Rng,
 } from "./engine";
 import type { Lineup, SimConfig } from "@/lib/data/schemas";
@@ -28,11 +34,11 @@ const SHU_QIANG: Lineup = {
   tags: ["打架", "PVP"],
   generalIds: ["liu_bei", "zhang_fei", "guan_yu"],
   generalRedLevels: { liu_bei: 0, zhang_fei: 0, guan_yu: 0 },
-  formationSkillId: "wu_feng_zhen",
   troop: "spear",
   skills: {
+    // v6:阵法(武峰阵)下沉到主将战法槽 0
     main: {
-      liu_bei: ["ren_de_zai_shi", "yi_xin_zhao_yong", "jie_li_zuo_mou"],
+      liu_bei: ["wu_feng_zhen", "ren_de_zai_shi", "yi_xin_zhao_yong"],
     },
     vice: {
       zhang_fei: ["wan_ren_zhi_di", "chen_mu_heng_mao"],
@@ -57,6 +63,40 @@ const SHU_QIANG: Lineup = {
     total: 62.5,
   },
   tierByScore: "T1",
+};
+
+/** v6:一个没有阵法的主将槽 0(用指挥战法代替,模拟"未配置阵法"的边界) */
+const NO_FORMATION: Lineup = {
+  ...SHU_QIANG,
+  id: "no_formation",
+  name: "无阵法测试",
+  skills: {
+    main: {
+      liu_bei: ["ren_de_zai_shi", "yi_xin_zhao_yong", "jie_li_zuo_mou"],
+    },
+    vice: {
+      zhang_fei: ["wan_ren_zhi_di", "chen_mu_heng_mao"],
+      guan_yu: ["wei_zhen_hua_xia", "heng_sao_qian_jun"],
+    },
+  },
+};
+
+/** v6:蜀智 — 主将战法槽 0 = ba_gua_zhen(八卦阵) */
+const SHU_ZHI: Lineup = {
+  ...SHU_QIANG,
+  id: "shu_zhi",
+  name: "蜀智",
+  generalIds: ["zhuge_liang", "pang_tong", "xu_shu"],
+  generalRedLevels: { zhuge_liang: 0, pang_tong: 0, xu_shu: 0 },
+  skills: {
+    main: {
+      zhuge_liang: ["ba_gua_zhen", "kong_cheng_ji", "yi_xin_zhao_yong"],
+    },
+    vice: {
+      pang_tong: ["lian_huo_zhi_xin", "huo_chi_yuan_liao"],
+      xu_shu: ["shi_bie_san_ri", "jie_li_zuo_mou"],
+    },
+  },
 };
 
 const SIM_CONFIG: SimConfig = {
@@ -102,17 +142,32 @@ function makeSeededRng(seed: number): Rng {
   };
 }
 
+// v6:标准阵法(蜀枪的主将战法槽 0)
+const WU_FENG_ZHEN: FormationSkill = {
+  id: "wu_feng_zhen",
+  name: "武峰阵",
+  subType: "阵法",
+};
+
+const BA_GUA_ZHEN: FormationSkill = {
+  id: "ba_gua_zhen",
+  name: "八卦阵",
+  subType: "阵法",
+};
+
 // ---------------------------------------------------------------------------
 // 1. 蜀枪 vs 蜀枪 → ~50% A 胜率
 // ---------------------------------------------------------------------------
 
 describe("simulate() — 对称性", () => {
-  it("蜀枪 vs 蜀枪 → A 胜率应在 50% 附近(±15%)", () => {
+  it("蜀枪 vs 蜀枪(双方带武峰阵)→ A 胜率应在 50% 附近(±15%)", () => {
     const r = simulate({
       lineupA: SHU_QIANG,
       lineupB: SHU_QIANG,
       iterations: 1000,
       simConfig: SIM_CONFIG,
+      formationSkillA: WU_FENG_ZHEN,
+      formationSkillB: WU_FENG_ZHEN,
       rng: makeSeededRng(42),
     });
     const winRateA = r.winnerA / r.iterations;
@@ -121,6 +176,19 @@ describe("simulate() — 对称性", () => {
     expect(winRateA).toBeLessThanOrEqual(0.65);
     // 三类胜场加和 = iterations
     expect(r.winnerA + r.winnerB + r.draw).toBe(1000);
+  });
+
+  it("v6:不传 formationSkill 时 → 默认无阵法,不报错", () => {
+    // 向后兼容:旧调用方不传 formationSkill,引擎应当照常跑
+    const r = simulate({
+      lineupA: SHU_QIANG,
+      lineupB: SHU_QIANG,
+      iterations: 100,
+      simConfig: SIM_CONFIG,
+      rng: makeSeededRng(42),
+    });
+    expect(r.iterations).toBe(100);
+    expect(r.winnerA + r.winnerB + r.draw).toBe(100);
   });
 });
 
@@ -136,6 +204,8 @@ describe("simulate() — 性能", () => {
       lineupB: SHU_QIANG,
       iterations: 1000,
       simConfig: SIM_CONFIG,
+      formationSkillA: WU_FENG_ZHEN,
+      formationSkillB: WU_FENG_ZHEN,
       rng: makeSeededRng(7),
     });
     const elapsed = Date.now() - start;
@@ -158,6 +228,8 @@ describe("simulate() — 缺数据兜底", () => {
         lineupB: SHU_QIANG,
         iterations: 100,
         simConfig: SIM_CONFIG,
+        formationSkillA: WU_FENG_ZHEN,
+        formationSkillB: WU_FENG_ZHEN,
         rng: makeSeededRng(1),
       }),
     ).not.toThrow();
@@ -169,6 +241,8 @@ describe("simulate() — 缺数据兜底", () => {
       lineupB: SHU_QIANG,
       iterations: 0,
       simConfig: SIM_CONFIG,
+      formationSkillA: WU_FENG_ZHEN,
+      formationSkillB: WU_FENG_ZHEN,
     });
     expect(r.iterations).toBe(0);
     expect(r.winnerA + r.winnerB + r.draw).toBe(0);
@@ -250,10 +324,84 @@ describe("simulate() — 强弱对照", () => {
       lineupB: SHU_QIANG,
       iterations: 500,
       simConfig: SIM_CONFIG,
+      formationSkillA: WU_FENG_ZHEN,
+      formationSkillB: WU_FENG_ZHEN,
       rng: makeSeededRng(99),
     });
     const winRateA = r.winnerA / r.iterations;
     // 强队 ratings 90 vs 62.5,胜率应明显高(> 65%)
     expect(winRateA).toBeGreaterThan(0.55);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 7. v6 新增:阵法从主将战法槽 0 解析
+// ---------------------------------------------------------------------------
+
+describe("v6 — resolveFormationFromLineup", () => {
+  it("主将战法槽 0 是阵法 → 解析成功", () => {
+    const skillMap = new Map<string, FormationSkill>([
+      ["wu_feng_zhen", WU_FENG_ZHEN],
+      ["ba_gua_zhen", BA_GUA_ZHEN],
+    ]);
+    expect(resolveFormationFromLineup(SHU_QIANG, skillMap)).toEqual(WU_FENG_ZHEN);
+    expect(resolveFormationFromLineup(SHU_ZHI, skillMap)).toEqual(BA_GUA_ZHEN);
+  });
+
+  it("主将战法槽 0 是指挥/主动 → 解析为 null(只认阵法)", () => {
+    const skillMap = new Map<string, FormationSkill>([
+      [
+        "ren_de_zai_shi",
+        { id: "ren_de_zai_shi", name: "仁德载世", subType: "指挥" },
+      ],
+    ]);
+    expect(resolveFormationFromLineup(NO_FORMATION, skillMap)).toBeNull();
+  });
+
+  it("主将战法槽 0 不在 skillMap → 解析为 null", () => {
+    const skillMap = new Map<string, FormationSkill>();
+    expect(resolveFormationFromLineup(SHU_QIANG, skillMap)).toBeNull();
+  });
+});
+
+describe("v6 — buildBattleLineup 接受 formationSkill", () => {
+  it("formationSkill.subType='阵法' → formation=true,formationName 设置", () => {
+    const bl = buildBattleLineup(SHU_QIANG, WU_FENG_ZHEN);
+    expect(bl.formation).toBe(true);
+    expect(bl.formationName).toBe("武峰阵");
+  });
+
+  it("formationSkill 是 null / 缺失 → formation=false,formationName=null", () => {
+    expect(buildBattleLineup(SHU_QIANG).formation).toBe(false);
+    expect(buildBattleLineup(SHU_QIANG, null).formation).toBe(false);
+    expect(buildBattleLineup(SHU_QIANG).formationName).toBeNull();
+  });
+
+  it("formationSkill.subType 不是阵法 → formation=false", () => {
+    const notFormation: FormationSkill = {
+      id: "ren_de_zai_shi",
+      name: "仁德载世",
+      subType: "指挥",
+    };
+    const bl = buildBattleLineup(SHU_QIANG, notFormation);
+    expect(bl.formation).toBe(false);
+    expect(bl.formationName).toBeNull();
+  });
+});
+
+describe("v6 — 蜀枪(武峰阵) vs 蜀智(八卦阵) 端到端", () => {
+  it("阵法生效路径完整:不会因为 formationSkill 报错", () => {
+    const r = simulate({
+      lineupA: SHU_QIANG, // 武峰阵
+      lineupB: SHU_ZHI, // 八卦阵
+      iterations: 200,
+      simConfig: SIM_CONFIG,
+      formationSkillA: WU_FENG_ZHEN,
+      formationSkillB: BA_GUA_ZHEN,
+      rng: makeSeededRng(123),
+    });
+    // 三类胜场加和 = iterations
+    expect(r.winnerA + r.winnerB + r.draw).toBe(200);
+    expect(r.iterations).toBe(200);
   });
 });

@@ -175,7 +175,16 @@ export type Tactics = z.infer<typeof TacticsSchema>;
 // 8.4 Lineup — 阵容
 // ---------------------------------------------------------------------------
 
-/** 6 维评分(v0.5 新增,MVP 阶段手填,M2 改 F7 自动算) */
+/**
+ * v0.5 6 维评分(v0.5 新增,MVP 阶段手填,M2 改 F7 自动算)
+ * - output: 输出能力
+ * - recover: 回复 / 续航
+ * - multihit: 多穿 / AOE
+ * - rhythm: 节奏 / 主动发动频率
+ * - coverage: 打击面 / 命中范围
+ * - stability: 稳定性 / 抗打断
+ * - total: 综合分(冗余,=6 维均值)
+ */
 export const LineupRatingsSchema = z.object({
   output: z.number().min(0).max(100),
   recover: z.number().min(0).max(100),
@@ -187,58 +196,80 @@ export const LineupRatingsSchema = z.object({
 });
 export type LineupRatings = z.infer<typeof LineupRatingsSchema>;
 
-export const LineupSchema = z.object({
-  id: z.string().min(1),
-  name: z.string().min(1),
+/**
+ * Lineup v6 — 阵法降级为主将战法槽 0
+ *
+ * 与 v5 的差别:
+ *   - 删除了顶层字段 `formationSkillId`
+ *   - 阵法现在放在 `skills.main[generalIds[0]][0]`,且该位置的
+ *     战法 ID 必须指向 `Skill` 中 `subType === '阵法'` 的条目
+ *   - 主将的 `skills.main` 数组必须严格 3 个;副将 `skills.vice`
+ *     必须严格 2 个(已经是这样,这里只是显式说明)
+ *
+ * 兼容性:
+ *   - 顶层 `formationSkillId` 已**删除**,但保留在
+ *     `LineupSchema` 中标记为 deprecated + optional,便于历史
+ *     数据/草稿(配将器/Sandbox)平滑迁移;loader 在加载时如果
+ *     发现这个字段会 console.warn 一次。
+ *   - 阵法必须是主将战法槽 0 — 这一条用跨表一致性由
+ *     `lineups.references.test.ts` 校验。
+ */
+export const LineupSchema = z
+  .object({
+    id: z.string().min(1),
+    name: z.string().min(1),
 
-  /** 玩家圈强度评级 */
-  tier: LineupTierSchema,
+    /** 玩家圈强度评级 */
+    tier: LineupTierSchema,
 
-  /** 标签,例如["打架","PVP","开荒"] */
-  tags: z.array(z.string()),
+    /** 标签,例如["打架","PVP","开荒"] */
+    tags: z.array(z.string()),
 
-  /** 3 个武将 ID */
-  generalIds: z.array(z.string().min(1)).length(3),
+    /** 3 个武将 ID */
+    generalIds: z.array(z.string().min(1)).length(3),
 
-  /** v0.5 每个武将的红度(武将 ID -> 0-5) */
-  generalRedLevels: z.record(z.string(), z.number().int().min(0).max(5)),
+    /** v0.5 每个武将的红度(武将 ID -> 0-5) */
+    generalRedLevels: z.record(z.string(), z.number().int().min(0).max(5)),
 
-  /** v0.5.1 阵法战法 ID(指向 Skill 中 subType = 阵法) */
-  formationSkillId: z.string().nullable(),
+    /** @deprecated v6 删除 — 阵法已下沉为主将战法槽 0。仅保留为可选字段以兼容历史草稿,loader 加载时会 warn 一次 */
+    formationSkillId: z.string().nullable().optional(),
 
-  /** 兵种 */
-  troop: TroopTypeSchema,
+    /** 兵种 */
+    troop: TroopTypeSchema,
 
-  /** 战法分配 */
-  skills: z.object({
-    /** 主将战法 = 1 主 + 2 副 */
-    main: z.record(z.string(), z.tuple([z.string(), z.string(), z.string()])),
-    /** 副将战法 = 每人 2 个 */
-    vice: z.record(z.string(), z.tuple([z.string(), z.string()])),
-  }),
+    /** 战法分配 */
+    skills: z.object({
+      /** 主将战法 = [阵法, 战法, 战法] (3 个,槽 0 必须是阵法) */
+      main: z.record(z.string(), z.tuple([z.string(), z.string(), z.string()])),
+      /** 副将战法 = 每人 2 个 */
+      vice: z.record(z.string(), z.tuple([z.string(), z.string()])),
+    }),
 
-  /** v0.5 兵书(3 大 + 3 小,按武将顺序对应 generalIds) */
-  tactics: z.object({
-    major: z.tuple([z.string(), z.string(), z.string()]),
-    minor: z.tuple([z.string(), z.string(), z.string()]),
-  }),
+    /** v0.5 兵书(3 大 + 3 小,按武将顺序对应 generalIds) */
+    tactics: z.object({
+      major: z.tuple([z.string(), z.string(), z.string()]),
+      minor: z.tuple([z.string(), z.string(), z.string()]),
+    }),
 
-  /** v0.5.1 装备的特性 ID(原 specials 改名) */
-  equippedTraitIds: z.array(z.string().min(1)),
+    /** v0.5.1 装备的特性 ID(原 specials 改名) */
+    equippedTraitIds: z.array(z.string().min(1)),
 
-  description: z.string(),
+    description: z.string(),
 
-  /** 克制的阵容名 */
-  counters: z.array(z.string()),
-  /** 被什么阵容克制 */
-  counteredBy: z.array(z.string()),
+    /** 克制的阵容名 */
+    counters: z.array(z.string()),
+    /** 被什么阵容克制 */
+    counteredBy: z.array(z.string()),
 
-  /** 6 维评分 */
-  ratings: LineupRatingsSchema,
+    /** 6 维评分 */
+    ratings: LineupRatingsSchema,
 
-  /** 按综合分推算的等级(冗余字段,方便排序时直接读) */
-  tierByScore: LineupTierSchema,
-});
+    /** 按综合分推算的等级(冗余字段,方便排序时直接读) */
+    tierByScore: LineupTierSchema,
+  })
+  // 允许其它未知字段(防止未来加字段时一次性崩 15 条数据),
+  // 但 formationSkillId 已经在 schema 里,这一 passthrough 只是兜底。
+  .passthrough();
 export type Lineup = z.infer<typeof LineupSchema>;
 
 // ---------------------------------------------------------------------------

@@ -63,6 +63,14 @@ test-exists.ps1
 .tools
 test-exists.ps1
 
+# Sprint 6/7 临时 / 中间产物
+_adversarial_probe.mjs
+*.bak
+*.log
+s7-test-output.log
+deliverables/audit-*.txt
+deliverables/audit-script-output.md
+
 # mavis / .next 内部
 .mavis
 /plans

@@ -109,10 +109,14 @@ export default async function LineupDetailPage({ params }: PageProps) {
   const mainGeneralId = Object.keys(lineup.skills.main)[0];
   const mainGeneral = mainGeneralId ? generalMap.get(mainGeneralId) : null;
 
-  // 阵法战法
-  const formationSkill = lineup.formationSkillId
-    ? skillMap.get(lineup.formationSkillId) ?? null
-    : null;
+  // v6 阵法:主将战法槽 0(skills.main[generalIds[0]][0])
+  // 仅当 subType === '阵法' 时显示,其它情况视为未配阵法
+  const formationSkillId =
+    mainGeneralId ? lineup.skills.main[mainGeneralId]?.[0] : undefined;
+  const formationSkill =
+    formationSkillId && skillMap.get(formationSkillId)?.subType === "阵法"
+      ? skillMap.get(formationSkillId) ?? null
+      : null;
 
   // 兵书(major/minor 按武将顺序对应)
   const majorTactics: Array<{ tactic: Tactics; general: General | undefined }> = [];

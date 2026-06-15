@@ -186,5 +186,92 @@ export function computeWarnings(
   // 4. 兵书超过 3 个:仅统计非空 — 不会超长,这里只提示未选满
   // (省略 — 任务说"0-2 个/武将"对应特技,兵书是 3+3 固定)
 
+  // ──────────────────────────────────────────────────────────────────
+  // S6 UI 重构 — 新增 4 类提示(全是 additive,不修改上面 3 条逻辑)
+  // ──────────────────────────────────────────────────────────────────
+
+  // 5. 主将槽 1 必须是阵法(S6 新规范)
+  //    读 mainSkillIds[0]:如果是空 → info(没选);如果非阵法 → error
+  //    注:同时仍兼容老 formationSkillId(若已设但 mainSkillIds[0] 是空,
+  //    migrateLineup 已把它投影到主将槽 0,这里直接读 mainSkillIds[0] 即可)
+  if (lineup.main.generalId) {
+    const formationInSlot0 = lineup.mainSkillIds[0];
+    if (!formationInSlot0) {
+      out.push({
+        level: "warn",
+        text: `主将槽 1 未选阵法(S6 规范:阵法是战法的一种,必须放主将战法槽 1)`,
+      });
+    } else {
+      const s0 = skillMap.get(formationInSlot0);
+      if (s0 && s0.subType !== "阵法") {
+        out.push({
+          level: "error",
+          text: `主将槽 1 "${s0.name}" 不是阵法战法(subType=${s0.subType}),请换成阵法战法`,
+        });
+      }
+    }
+  }
+
+  // 6. 副将选了阵法 / 兵种 战法(S6 规则:副将槽不能是阵法/兵种)
+  const viceSlots: Array<{ arr: typeof lineup.vice1SkillIds; label: string }> = [
+    { arr: lineup.vice1SkillIds, label: "副将 1" },
+    { arr: lineup.vice2SkillIds, label: "副将 2" },
+  ];
+  for (const { arr, label } of viceSlots) {
+    arr.forEach((sid, i) => {
+      if (!sid) return;
+      const s = skillMap.get(sid);
+      if (!s) return;
+      if (s.subType === "阵法" || s.subType === "兵种") {
+        out.push({
+          level: "error",
+          text: `${label} 槽 ${i + 1} "${s.name}" 是${s.subType}战法,副将槽不能选${s.subType}`,
+        });
+      }
+    });
+  }
+
+  // 7. 同阵营 3 人加成未触发
+  //    复用 computeCampBonus 的同源逻辑:看 3 个武将是否同 camp
+  if (lineup.main.generalId && lineup.vice1.generalId && lineup.vice2.generalId) {
+    const camps = [
+      generalMap.get(lineup.main.generalId)?.camp,
+      generalMap.get(lineup.vice1.generalId)?.camp,
+      generalMap.get(lineup.vice2.generalId)?.camp,
+    ];
+    if (camps.every((c) => c && c === camps[0])) {
+      // 已触发 — 不需要警告(campBonus 区域会显示)
+    } else {
+      // 列出当前分布,提示玩家
+      const dist: Record<string, number> = {};
+      camps.forEach((c) => {
+        if (c) dist[c] = (dist[c] ?? 0) + 1;
+      });
+      const desc = Object.entries(dist)
+        .map(([c, n]) => `${c}×${n}`)
+        .join(" + ");
+      out.push({
+        level: "info",
+        text: `未触发同阵营 3S 加成(当前分布:${desc});同阵营可享 +10% 属性加成`,
+      });
+    }
+  }
+
+  // 8. 任意武将 learnableFormationSkillIds 不含主将槽 1 选的阵法
+  //    (compatibility.ts 原有 check 3 只检查 lineup.formationSkillId,
+  //    S6 新增这条检查 mainSkillIds[0] 这个新位置的阵法)
+  if (lineup.main.generalId && lineup.mainSkillIds[0]) {
+    const main = generalMap.get(lineup.main.generalId);
+    const formation = skillMap.get(lineup.mainSkillIds[0]);
+    if (main && formation && formation.subType === "阵法") {
+      if (!main.learnableFormationSkillIds.includes(lineup.mainSkillIds[0])) {
+        out.push({
+          level: "error",
+          text: `主将 ${main.name} 没学阵法 "${formation.name}",请换主将或换阵法`,
+        });
+      }
+    }
+  }
+
   return out;
 }

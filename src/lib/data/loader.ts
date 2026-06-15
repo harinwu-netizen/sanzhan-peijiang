@@ -165,8 +165,29 @@ export function loadLineups(): Lineup[] {
       LineupsFileSchema,
       [],
     );
+    // v6 兼容性:LineupSchema 把 formationSkillId 保留为 deprecated optional,
+    // 数据迁移期间如果发现任一 lineup 还带这个字段,只 warn 一次,提示
+    // 作者把阵法下沉到主将战法槽 0(skills.main[generalIds[0]][0])。
+    warnDeprecatedFormationSkillId(lineupsCache);
   }
   return lineupsCache;
+}
+
+/** 检测 v6 deprecated 字段 formationSkillId,只在第一次发现时 warn 一次 */
+let warnedFormationSkillId = false;
+function warnDeprecatedFormationSkillId(lineups: Lineup[]): void {
+  if (warnedFormationSkillId) return;
+  const offenders = lineups.filter(
+    (l) => l.formationSkillId != null && l.formationSkillId !== '',
+  );
+  if (offenders.length === 0) return;
+  warnedFormationSkillId = true;
+  const ids = offenders.map((l) => l.id).join(', ');
+  // eslint-disable-next-line no-console
+  console.warn(
+    `[loader] lineups.json 中 ${offenders.length} 条阵容仍使用 deprecated 字段 formationSkillId ` +
+      `(id: ${ids})。请把阵法下沉到 skills.main[generalIds[0]][0],并删除 formationSkillId。`,
+  );
 }
 
 /** 8.5 特技(traits.json — 数组) */

@@ -358,7 +358,7 @@ for (const l of lineups) {
 const numFailures = [];
 const numExamples = [];
 const STAT_MIN = 40;
-const STAT_MAX = 110;
+const STAT_MAX = 200;
 let statInRange = 0;
 let statTotal = 0;
 

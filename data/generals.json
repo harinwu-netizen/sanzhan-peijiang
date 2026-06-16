@@ -1,1107 +1,1730 @@
 [
- {
- "id": "zhuge_liang",
- "name": "诸葛亮",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":78, "智力":156, "统率":96, "速度":48 },
- "cavalry": "S",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "qi_xing_zhen",
- "inheritSkillId": "kong_cheng_ji",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "liu_bei",
- "name": "刘备",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":76, "智力":99, "统率":130, "速度":50 },
- "cavalry": "S",
- "shield": "S",
- "archer": "A",
- "spear": "S",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "ren_de_zai_shi",
- "inheritSkillId": "yi_xin_zhao_yong",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhang_fei",
- "name": "张飞",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":165, "智力":60, "统率":99, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "C",
- "spear": "S",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "wan_ren_zhi_di",
- "inheritSkillId": "chen_mu_heng_mao",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "guan_yu",
- "name": "关羽",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":175, "智力":75, "统率":130, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "wei_zhen_hua_xia",
- "inheritSkillId": "heng_sao_qian_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhao_yun",
- "name": "赵云",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":175, "智力":92, "统率":130, "速度":75 },
- "cavalry": "S",
- "shield": "S",
- "archer": "A",
- "spear": "S",
- "siege": "C",
- "trait": "被动",
- "selfSkillId": "long_dan",
- "inheritSkillId": "heng_sao_qian_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "cao_cao",
- "name": "曹操",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":92, "智力":110, "统率":156, "速度":50 },
- "cavalry": "S",
- "shield": "S",
- "archer": "A",
- "spear": "S",
- "siege": "B",
- "trait": "指挥",
- "selfSkillId": "jian_ling_jun",
- "inheritSkillId": "jian_xiong_zhen",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "feng_shi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "sima_yi",
- "name": "司马懿",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":75, "智力":178, "统率":130, "速度":45 },
- "cavalry": "A",
- "shield": "S",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "fan_yu_shi_shi",
- "inheritSkillId": "yi_qi_li_ci",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "guo_jia",
- "name": "郭嘉",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":62, "智力":165, "统率":88, "速度":65 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "C",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "shi_zhi_tian_xiang",
- "inheritSkillId": "tai_ping_dao_fa",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhang_liao",
- "name": "张辽",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":178, "智力":70, "统率":120, "速度":78 },
- "cavalry": "S",
- "shield": "A",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "xia_yong_shan_di",
- "inheritSkillId": "po_zhen_cui_jian",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yan_xing_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "xu_chu",
- "name": "许褚",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":188, "智力":50, "统率":90, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "C",
- "spear": "B",
- "siege": "C",
- "trait": "被动",
- "selfSkillId": "rou_ru_gang_ti",
- "inheritSkillId": "bing_feng",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "dian_wei",
- "name": "典韦",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":192, "智力":48, "统率":92, "速度":65 },
- "cavalry": "A",
- "shield": "S",
- "archer": "C",
- "spear": "B",
- "siege": "C",
- "trait": "被动",
- "selfSkillId": "qiang_huo_xi_ji",
- "inheritSkillId": "qie_zhen_duo_shuai",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "xiahou_dun",
- "name": "夏侯惇",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":165, "智力":78, "统率":138, "速度":55 },
- "cavalry": "S",
- "shield": "S",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "gang_nue_bu_si",
- "inheritSkillId": "xue_jian_xuan_yuan",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yu_lin_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "xiahou_yuan",
- "name": "夏侯渊",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":175, "智力":68, "统率":110, "速度":72 },
- "cavalry": "S",
- "shield": "A",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "guan_du_ju_ji",
- "inheritSkillId": "bao_lian_si_fang",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yan_xing_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhang_he",
- "name": "张郃",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":165, "智力":80, "统率":130, "速度":70 },
- "cavalry": "A",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "zhu_jin_duan_hou",
- "inheritSkillId": "duan_bing_xiang_jie",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "xu_huang",
- "name": "徐晃",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":170, "智力":78, "统率":135, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "jie_dao_zhong_yong",
- "inheritSkillId": "xue_jian_xuan_yuan",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "yu_jin",
- "name": "于禁",
- "camp": "魏",
- "quality": "紫",
- "stats": { "武力":152, "智力":70, "统率":128, "速度":55 },
- "cavalry": "A",
- "shield": "S",
- "archer": "B",
- "spear": "A",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "jin_ye_shi_zhen",
- "inheritSkillId": "wu_dang_fei_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "le_jin",
- "name": "乐进",
- "camp": "魏",
- "quality": "紫",
- "stats": { "武力":168, "智力":65, "统率":105, "速度":70 },
- "cavalry": "A",
- "shield": "A",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "突击",
- "selfSkillId": "zhao_jiang_chong_feng",
- "inheritSkillId": "xi_liang_tie_qi",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "huang_zhong",
- "name": "黄忠",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":178, "智力":70, "统率":115, "速度":65 },
- "cavalry": "A",
- "shield": "A",
- "archer": "S",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "bai_la_zhui_feng",
- "inheritSkillId": "ba_men_jin_suo_zhen",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "ma_chao",
- "name": "马超",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":188, "智力":60, "统率":120, "速度":80 },
- "cavalry": "S",
- "shield": "A",
- "archer": "C",
- "spear": "S",
- "siege": "C",
- "trait": "突击",
- "selfSkillId": "tie_qi_xuan_di",
- "inheritSkillId": "yi_qi_li_ci",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yan_xing_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "jiang_wei",
- "name": "姜维",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":158, "智力":138, "统率":135, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "zhong_li_zhi_hou",
- "inheritSkillId": "gua_gu_liao_du",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "wei_yan",
- "name": "魏延",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":175, "智力":72, "统率":122, "速度":70 },
- "cavalry": "A",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "po_li_qiang_jin",
- "inheritSkillId": "po_zhen_cui_jian",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "guan_ping",
- "name": "关平",
- "camp": "蜀",
- "quality": "紫",
- "stats": { "武力":162, "智力":70, "统率":110, "速度":65 },
- "cavalry": "A",
- "shield": "A",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "mu_ye_zhan_yi",
- "inheritSkillId": "chen_mu_heng_mao",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "pang_tong",
- "name": "庞统",
- "camp": "蜀",
- "quality": "紫",
- "stats": { "武力":70, "智力":165, "统率":110, "速度":50 },
- "cavalry": "A",
- "shield": "B",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "lian_huan_ji",
- "inheritSkillId": "wu_dang_fei_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "fa_zheng",
- "name": "法正",
- "camp": "蜀",
- "quality": "紫",
- "stats": { "武力":78, "智力":152, "统率":105, "速度":55 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "ji_yi_ling_feng",
- "inheritSkillId": "yi_dan_zhong_xin",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "liu_ba",
- "name": "刘巴",
- "camp": "蜀",
- "quality": "蓝",
- "stats": { "武力":60, "智力":138, "统率":88, "速度":50 },
- "cavalry": "C",
- "shield": "A",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "被动",
- "selfSkillId": "yi_shi_fei_yang",
- "inheritSkillId": null,
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "sun_quan",
- "name": "孙权",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":110, "智力":130, "统率":145, "速度":55 },
- "cavalry": "A",
- "shield": "S",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "ding_jiang_shang_you",
- "inheritSkillId": "jian_xiong_zhen",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "feng_shi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhou_yu",
- "name": "周瑜",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":80, "智力":168, "统率":138, "速度":60 },
- "cavalry": "A",
- "shield": "B",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "huo_fen_chi_bi",
- "inheritSkillId": "tai_ping_dao_fa",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "lu_xun",
- "name": "陆逊",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":75, "智力":175, "统率":148, "速度":55 },
- "cavalry": "A",
- "shield": "S",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "qi_lie_huo_yan",
- "inheritSkillId": "wu_dang_fei_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "tai_shi_ci",
- "name": "太史慈",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":178, "智力":75, "统率":120, "速度":72 },
- "cavalry": "S",
- "shield": "A",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "突击",
- "selfSkillId": "tian_yi_shi_zi",
- "inheritSkillId": "duan_bing_xiang_jie",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yan_xing_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "gan_ning",
- "name": "甘宁",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":185, "智力":62, "统率":105, "速度":78 },
- "cavalry": "S",
- "shield": "A",
- "archer": "A",
- "spear": "C",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "ling_yao_xian_feng",
- "inheritSkillId": "kuang_nu_xi_feng",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "lv_meng",
- "name": "吕蒙",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":152, "智力":135, "统率":138, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "A",
- "spear": "S",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "bai_mian_yin_fu",
- "inheritSkillId": "wu_dang_fei_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "he_yi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "lu_su",
- "name": "鲁肃",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":70, "智力":158, "统率":145, "速度":50 },
- "cavalry": "B",
- "shield": "A",
- "archer": "A",
- "spear": "S",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "yi_hu_zhu_jie",
- "inheritSkillId": "shi_zhi_bu_yi",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "he_yi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "daqiao",
- "name": "大乔",
- "camp": "吴",
- "quality": "紫",
- "stats": { "武力":80, "智力":130, "统率":95, "速度":70 },
- "cavalry": "B",
- "shield": "A",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "mei_miao_qing_yuan",
- "inheritSkillId": "mei_mian_hua_xu",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "xiaoqiao",
- "name": "小乔",
- "camp": "吴",
- "quality": "紫",
- "stats": { "武力":78, "智力":135, "统率":92, "速度":72 },
- "cavalry": "B",
- "shield": "A",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "mei_ying_qing_si",
- "inheritSkillId": null,
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "sun_ce",
- "name": "孙策",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":180, "智力":78, "统率":125, "速度":75 },
- "cavalry": "S",
- "shield": "A",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "突击",
- "selfSkillId": "jiang_dong_zhi_gu",
- "inheritSkillId": "xi_liang_tie_qi",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "yan_xing_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhou_tai",
- "name": "周泰",
- "camp": "吴",
- "quality": "紫",
- "stats": { "武力":175, "智力":60, "统率":138, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "C",
- "spear": "B",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "bu_qu_bu_xi",
- "inheritSkillId": "zhen_fen_tong_qu",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "huang_gai",
- "name": "黄盖",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":162, "智力":78, "统率":130, "速度":60 },
- "cavalry": "A",
- "shield": "S",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "ku_zhou_zhi_ji",
- "inheritSkillId": "gui_shen_mo_ce",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "lv_bu",
- "name": "吕布",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":200, "智力":50, "统率":115, "速度":90 },
- "cavalry": "S",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "被动",
- "selfSkillId": "wu_shuang_ji_duan",
- "inheritSkillId": "yi_qi_li_ci",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "da_yan_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "dong_zhuo",
- "name": "董卓",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":152, "智力":75, "统率":145, "速度":50 },
- "cavalry": "A",
- "shield": "S",
- "archer": "C",
- "spear": "B",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "zheng_chao_ling_yun",
- "inheritSkillId": "tai_ping_dao_fa",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "hua_tuo",
- "name": "华佗",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":60, "智力":165, "统率":110, "速度":55 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "B",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "qing_nang_ji_dan",
- "inheritSkillId": "jian_ti_qiang_shen",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zuo_ci",
- "name": "左慈",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":55, "智力":175, "统率":105, "速度":60 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "yu_huo_feng_xiong",
- "inheritSkillId": "shi_zhi_bu_yi",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "yu_ji",
- "name": "于吉",
- "camp": "群",
- "quality": "蓝",
- "stats": { "武力":58, "智力":145, "统率":95, "速度":55 },
- "cavalry": "C",
- "shield": "B",
- "archer": "A",
- "spear": "B",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "zong_miao_xiao_yao",
- "inheritSkillId": null,
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "zhang_jiao",
- "name": "张角",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":68, "智力":165, "统率":120, "速度":55 },
- "cavalry": "B",
- "shield": "S",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "huang_tian_chi_ling",
- "inheritSkillId": "dao_shu_jie_du",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "diao_chan",
- "name": "貂蝉",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":70, "智力":158, "统率":95, "速度":75 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "bi_se_tian_xiang",
- "inheritSkillId": "mei_dou_feng_bao",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "chen_gong",
- "name": "陈宫",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":60, "智力":162, "统率":110, "速度":65 },
- "cavalry": "B",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "指挥",
- "selfSkillId": "ming_ce_shi_ju",
- "inheritSkillId": "wu_dang_fei_jun",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1
- },
- {
- "id": "sp_zhuge_liang",
- "name": "SP 诸葛亮",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":80, "智力":188, "统率":105, "速度":50 },
- "cavalry": "S",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "qi_xing_yong_ji",
- "inheritSkillId": "bei_she_gui_che",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1,
- "isSP": true
- },
- {
- "id": "sp_guan_yu",
- "name": "SP 关羽",
- "camp": "蜀",
- "quality": "橙",
- "stats": { "武力":195, "智力":80, "统率":145, "速度":65 },
- "cavalry": "S",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "long_lv_chu_feng",
- "inheritSkillId": "qi_lie_huo_yan",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "feng_shi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1,
- "isSP": true
- },
- {
- "id": "sp_cao_cao",
- "name": "SP 曹操",
- "camp": "魏",
- "quality": "橙",
- "stats": { "武力":98, "智力":135, "统率":175, "速度":55 },
- "cavalry": "S",
- "shield": "S",
- "archer": "A",
- "spear": "S",
- "siege": "B",
- "trait": "指挥",
- "selfSkillId": "jian_ling_jun_xiong",
- "inheritSkillId": "zheng_zhuang_dai_fa",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "feng_shi_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1,
- "isSP": true
- },
- {
- "id": "sp_zhou_yu",
- "name": "SP 周瑜",
- "camp": "吴",
- "quality": "橙",
- "stats": { "武力":85, "智力":188, "统率":152, "速度":65 },
- "cavalry": "A",
- "shield": "A",
- "archer": "S",
- "spear": "A",
- "siege": "C",
- "trait": "主动",
- "selfSkillId": "chi_bi_ying_lie",
- "inheritSkillId": "chen_sha_jue_shui",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "ba_gua_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1,
- "isSP": true
- },
- {
- "id": "sp_lv_bu",
- "name": "SP 吕布",
- "camp": "群",
- "quality": "橙",
- "stats": { "武力":210, "智力":55, "统率":125, "速度":92 },
- "cavalry": "S",
- "shield": "S",
- "archer": "B",
- "spear": "S",
- "siege": "C",
- "trait": "突击",
- "selfSkillId": "wu_shuang_mie_di",
- "inheritSkillId": "duan_bing_xiang_jie",
- "redLevel":0,
- "learnableFormationSkillIds": ["wu_feng_zhen", "da_yan_zhen"],
- "tacticsOptions": {
- "major": ["tactic_001", "tactic_002"],
- "minor": ["tactic_101"]
- },
- "equippableTraitCount":1,
- "isSP": true
- }
+  {
+    "id": "zhuge_liang",
+    "name": "诸葛亮",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 78,
+      "智力": 156,
+      "统率": 96,
+      "速度": 48
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "qi_xing_zhen",
+    "inheritSkillId": "kong_cheng_ji",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "liu_bei",
+    "name": "刘备",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 76,
+      "智力": 99,
+      "统率": 130,
+      "速度": 50
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "A",
+    "spear": "S",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "ren_de_zai_shi",
+    "inheritSkillId": "yi_xin_zhao_yong",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhang_fei",
+    "name": "张飞",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 165,
+      "智力": 60,
+      "统率": 99,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "C",
+    "spear": "S",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "wan_ren_zhi_di",
+    "inheritSkillId": "chen_mu_heng_mao",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "guan_yu",
+    "name": "关羽",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 175,
+      "智力": 75,
+      "统率": 130,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "wei_zhen_hua_xia",
+    "inheritSkillId": "heng_sao_qian_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhao_yun",
+    "name": "赵云",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 175,
+      "智力": 92,
+      "统率": 130,
+      "速度": 75
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "A",
+    "spear": "S",
+    "siege": "C",
+    "trait": "被动",
+    "selfSkillId": "long_dan",
+    "inheritSkillId": "heng_sao_qian_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "cao_cao",
+    "name": "曹操",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 92,
+      "智力": 110,
+      "统率": 156,
+      "速度": 50
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "A",
+    "spear": "S",
+    "siege": "B",
+    "trait": "指挥",
+    "selfSkillId": "ba_men_jin_suo_zhen",
+    "inheritSkillId": "zheng_zhuang_dai_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "feng_shi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "sima_yi",
+    "name": "司马懿",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 75,
+      "智力": 178,
+      "统率": 130,
+      "速度": 45
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "jie_li_zuo_mou",
+    "inheritSkillId": "yi_qi_li_ci",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "guo_jia",
+    "name": "郭嘉",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 62,
+      "智力": 165,
+      "统率": 88,
+      "速度": 65
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "C",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "tai_ping_dao_fa",
+    "inheritSkillId": "tai_ping_dao_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhang_liao",
+    "name": "张辽",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 178,
+      "智力": 70,
+      "统率": 120,
+      "速度": 78
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "chen_mu_heng_mao",
+    "inheritSkillId": "po_zhen_cui_jian",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yan_xing_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "xu_chu",
+    "name": "许褚",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 188,
+      "智力": 50,
+      "统率": 90,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "C",
+    "spear": "B",
+    "siege": "C",
+    "trait": "被动",
+    "selfSkillId": "bao_lian_si_fang",
+    "inheritSkillId": "bing_feng",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "dian_wei",
+    "name": "典韦",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 192,
+      "智力": 48,
+      "统率": 92,
+      "速度": 65
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "C",
+    "spear": "B",
+    "siege": "C",
+    "trait": "被动",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "qie_zhen_duo_shuai",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "xiahou_dun",
+    "name": "夏侯惇",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 165,
+      "智力": 78,
+      "统率": 138,
+      "速度": 55
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "qie_zhen_duo_shuai",
+    "inheritSkillId": "xue_jian_xuan_yuan",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yu_lin_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "xiahou_yuan",
+    "name": "夏侯渊",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 175,
+      "智力": 68,
+      "统率": 110,
+      "速度": 72
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "bing_feng",
+    "inheritSkillId": "bao_lian_si_fang",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yan_xing_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhang_he",
+    "name": "张郃",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 165,
+      "智力": 80,
+      "统率": 130,
+      "速度": 70
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "duan_bing_xiang_jie",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "xu_huang",
+    "name": "徐晃",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 170,
+      "智力": 78,
+      "统率": 135,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "tai_ping_dao_fa",
+    "inheritSkillId": "xue_jian_xuan_yuan",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "yu_jin",
+    "name": "于禁",
+    "camp": "魏",
+    "quality": "紫",
+    "stats": {
+      "武力": 152,
+      "智力": 70,
+      "统率": 128,
+      "速度": 55
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "B",
+    "spear": "A",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "xiao_yong_wu_pi",
+    "inheritSkillId": "wu_dang_fei_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "le_jin",
+    "name": "乐进",
+    "camp": "魏",
+    "quality": "紫",
+    "stats": {
+      "武力": 168,
+      "智力": 65,
+      "统率": 105,
+      "速度": 70
+    },
+    "cavalry": "A",
+    "shield": "A",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "突击",
+    "selfSkillId": "qie_zhen_duo_shuai",
+    "inheritSkillId": "xi_liang_tie_qi",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "huang_zhong",
+    "name": "黄忠",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 178,
+      "智力": 70,
+      "统率": 115,
+      "速度": 65
+    },
+    "cavalry": "A",
+    "shield": "A",
+    "archer": "S",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "chen_mu_heng_mao",
+    "inheritSkillId": "ba_men_jin_suo_zhen",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "ma_chao",
+    "name": "马超",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 188,
+      "智力": 60,
+      "统率": 120,
+      "速度": 80
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "C",
+    "spear": "S",
+    "siege": "C",
+    "trait": "突击",
+    "selfSkillId": "bao_lian_si_fang",
+    "inheritSkillId": "yi_qi_li_ci",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yan_xing_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "jiang_wei",
+    "name": "姜维",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 158,
+      "智力": 138,
+      "统率": 135,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "xue_jian_xuan_yuan",
+    "inheritSkillId": "gua_gu_liao_du",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "wei_yan",
+    "name": "魏延",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 175,
+      "智力": 72,
+      "统率": 122,
+      "速度": 70
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "po_zhen_cui_jian",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "guan_ping",
+    "name": "关平",
+    "camp": "蜀",
+    "quality": "紫",
+    "stats": {
+      "武力": 162,
+      "智力": 70,
+      "统率": 110,
+      "速度": 65
+    },
+    "cavalry": "A",
+    "shield": "A",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "tai_ping_dao_fa",
+    "inheritSkillId": "chen_mu_heng_mao",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "pang_tong",
+    "name": "庞统",
+    "camp": "蜀",
+    "quality": "紫",
+    "stats": {
+      "武力": 70,
+      "智力": 165,
+      "统率": 110,
+      "速度": 50
+    },
+    "cavalry": "A",
+    "shield": "B",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "jie_li_zuo_mou",
+    "inheritSkillId": "wu_dang_fei_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "fa_zheng",
+    "name": "法正",
+    "camp": "蜀",
+    "quality": "紫",
+    "stats": {
+      "武力": 78,
+      "智力": 152,
+      "统率": 105,
+      "速度": 55
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "kong_cheng_ji",
+    "inheritSkillId": "yi_dan_zhong_xin",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "liu_ba",
+    "name": "刘巴",
+    "camp": "蜀",
+    "quality": "蓝",
+    "stats": {
+      "武力": 60,
+      "智力": 138,
+      "统率": 88,
+      "速度": 50
+    },
+    "cavalry": "C",
+    "shield": "A",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "被动",
+    "selfSkillId": "shi_bie_san_ri",
+    "inheritSkillId": null,
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "sun_quan",
+    "name": "孙权",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 110,
+      "智力": 130,
+      "统率": 145,
+      "速度": 55
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "wan_ren_zhi_di",
+    "inheritSkillId": "shi_zheng_xian_fu",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "feng_shi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhou_yu",
+    "name": "周瑜",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 80,
+      "智力": 168,
+      "统率": 138,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "B",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "ba_men_jin_suo_zhen",
+    "inheritSkillId": "tai_ping_dao_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "lu_xun",
+    "name": "陆逊",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 75,
+      "智力": 175,
+      "统率": 148,
+      "速度": 55
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "jie_li_zuo_mou",
+    "inheritSkillId": "wu_dang_fei_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "tai_shi_ci",
+    "name": "太史慈",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 178,
+      "智力": 75,
+      "统率": 120,
+      "速度": 72
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "突击",
+    "selfSkillId": "bing_feng",
+    "inheritSkillId": "duan_bing_xiang_jie",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yan_xing_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "gan_ning",
+    "name": "甘宁",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 185,
+      "智力": 62,
+      "统率": 105,
+      "速度": 78
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "A",
+    "spear": "C",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "bao_lian_si_fang",
+    "inheritSkillId": "duan_bing_xiang_jie",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "lv_meng",
+    "name": "吕蒙",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 152,
+      "智力": 135,
+      "统率": 138,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "A",
+    "spear": "S",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "gui_shen_mo_ce",
+    "inheritSkillId": "wu_dang_fei_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "he_yi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "lu_su",
+    "name": "鲁肃",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 70,
+      "智力": 158,
+      "统率": 145,
+      "速度": 50
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "A",
+    "spear": "S",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "kong_cheng_ji",
+    "inheritSkillId": "shi_zhi_bu_yi",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "he_yi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "daqiao",
+    "name": "大乔",
+    "camp": "吴",
+    "quality": "紫",
+    "stats": {
+      "武力": 80,
+      "智力": 130,
+      "统率": 95,
+      "速度": 70
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "shi_bie_san_ri",
+    "inheritSkillId": "yi_dan_zhong_xin",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "xiaoqiao",
+    "name": "小乔",
+    "camp": "吴",
+    "quality": "紫",
+    "stats": {
+      "武力": 78,
+      "智力": 135,
+      "统率": 92,
+      "速度": 72
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "shi_bie_san_ri",
+    "inheritSkillId": null,
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "sun_ce",
+    "name": "孙策",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 180,
+      "智力": 78,
+      "统率": 125,
+      "速度": 75
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "突击",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "xi_liang_tie_qi",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "yan_xing_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhou_tai",
+    "name": "周泰",
+    "camp": "吴",
+    "quality": "紫",
+    "stats": {
+      "武力": 175,
+      "智力": 60,
+      "统率": 138,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "C",
+    "spear": "B",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "xiao_yong_wu_pi",
+    "inheritSkillId": "jian_ti_qiang_shen",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "huang_gai",
+    "name": "黄盖",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 162,
+      "智力": 78,
+      "统率": 130,
+      "速度": 60
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "bao_lian_si_fang",
+    "inheritSkillId": "gui_shen_mo_ce",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "lv_bu",
+    "name": "吕布",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 200,
+      "智力": 50,
+      "统率": 115,
+      "速度": 90
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "被动",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "yi_qi_li_ci",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "da_yan_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "dong_zhuo",
+    "name": "董卓",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 152,
+      "智力": 75,
+      "统率": 145,
+      "速度": 50
+    },
+    "cavalry": "A",
+    "shield": "S",
+    "archer": "C",
+    "spear": "B",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "xiao_yong_wu_pi",
+    "inheritSkillId": "tai_ping_dao_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "hua_tuo",
+    "name": "华佗",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 60,
+      "智力": 165,
+      "统率": 110,
+      "速度": 55
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "B",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "kong_cheng_ji",
+    "inheritSkillId": "jian_ti_qiang_shen",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zuo_ci",
+    "name": "左慈",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 55,
+      "智力": 175,
+      "统率": 105,
+      "速度": 60
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "shi_bie_san_ri",
+    "inheritSkillId": "shi_zhi_bu_yi",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "yu_ji",
+    "name": "于吉",
+    "camp": "群",
+    "quality": "蓝",
+    "stats": {
+      "武力": 58,
+      "智力": 145,
+      "统率": 95,
+      "速度": 55
+    },
+    "cavalry": "C",
+    "shield": "B",
+    "archer": "A",
+    "spear": "B",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "xue_jian_xuan_yuan",
+    "inheritSkillId": null,
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "zhang_jiao",
+    "name": "张角",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 68,
+      "智力": 165,
+      "统率": 120,
+      "速度": 55
+    },
+    "cavalry": "B",
+    "shield": "S",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "jie_li_zuo_mou",
+    "inheritSkillId": "xu_shi_dai_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "diao_chan",
+    "name": "貂蝉",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 70,
+      "智力": 158,
+      "统率": 95,
+      "速度": 75
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "gui_shen_mo_ce",
+    "inheritSkillId": "yi_dan_zhong_xin",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "chen_gong",
+    "name": "陈宫",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 60,
+      "智力": 162,
+      "统率": 110,
+      "速度": 65
+    },
+    "cavalry": "B",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "指挥",
+    "selfSkillId": "tai_ping_dao_fa",
+    "inheritSkillId": "wu_dang_fei_jun",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1
+  },
+  {
+    "id": "sp_zhuge_liang",
+    "name": "SP 诸葛亮",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 80,
+      "智力": 188,
+      "统率": 105,
+      "速度": 50
+    },
+    "cavalry": "S",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "ba_men_jin_suo_zhen",
+    "inheritSkillId": "bei_she_gui_che",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1,
+    "isSP": true
+  },
+  {
+    "id": "sp_guan_yu",
+    "name": "SP 关羽",
+    "camp": "蜀",
+    "quality": "橙",
+    "stats": {
+      "武力": 195,
+      "智力": 80,
+      "统率": 145,
+      "速度": 65
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "chen_mu_heng_mao",
+    "inheritSkillId": "jian_ti_qiang_shen",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "feng_shi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1,
+    "isSP": true
+  },
+  {
+    "id": "sp_cao_cao",
+    "name": "SP 曹操",
+    "camp": "魏",
+    "quality": "橙",
+    "stats": {
+      "武力": 98,
+      "智力": 135,
+      "统率": 175,
+      "速度": 55
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "A",
+    "spear": "S",
+    "siege": "B",
+    "trait": "指挥",
+    "selfSkillId": "wan_ren_zhi_di",
+    "inheritSkillId": "zheng_zhuang_dai_fa",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "feng_shi_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1,
+    "isSP": true
+  },
+  {
+    "id": "sp_zhou_yu",
+    "name": "SP 周瑜",
+    "camp": "吴",
+    "quality": "橙",
+    "stats": {
+      "武力": 85,
+      "智力": 188,
+      "统率": 152,
+      "速度": 65
+    },
+    "cavalry": "A",
+    "shield": "A",
+    "archer": "S",
+    "spear": "A",
+    "siege": "C",
+    "trait": "主动",
+    "selfSkillId": "ba_men_jin_suo_zhen",
+    "inheritSkillId": "chen_sha_jue_shui",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "ba_gua_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1,
+    "isSP": true
+  },
+  {
+    "id": "sp_lv_bu",
+    "name": "SP 吕布",
+    "camp": "群",
+    "quality": "橙",
+    "stats": {
+      "武力": 199,
+      "智力": 55,
+      "统率": 125,
+      "速度": 92
+    },
+    "cavalry": "S",
+    "shield": "S",
+    "archer": "B",
+    "spear": "S",
+    "siege": "C",
+    "trait": "突击",
+    "selfSkillId": "heng_sao_qian_jun",
+    "inheritSkillId": "duan_bing_xiang_jie",
+    "redLevel": 0,
+    "learnableFormationSkillIds": [
+      "wu_feng_zhen",
+      "da_yan_zhen"
+    ],
+    "tacticsOptions": {
+      "major": [
+        "tactic_001",
+        "tactic_002"
+      ],
+      "minor": [
+        "tactic_101"
+      ]
+    },
+    "equippableTraitCount": 1,
+    "isSP": true
+  }
 ]

@@ -3,8 +3,16 @@
     "id": "shu_qiang",
     "name": "蜀枪",
     "tier": "T1",
-    "tags": ["打架", "PVP", "经典阵容"],
-    "generalIds": ["liu_bei", "zhang_fei", "guan_yu"],
+    "tags": [
+      "打架",
+      "PVP",
+      "经典阵容"
+    ],
+    "generalIds": [
+      "liu_bei",
+      "zhang_fei",
+      "guan_yu"
+    ],
     "generalRedLevels": {
       "liu_bei": 0,
       "zhang_fei": 0,
@@ -44,8 +52,14 @@
     },
     "equippedTraitIds": [],
     "description": "刘备主将治疗,张飞关羽输出,武峰阵分担伤害,经典蜀国控制枪。",
-    "counters": ["wu_gong", "tao_yuan_dun"],
-    "counteredBy": ["qun_gong", "san_shi_lu"],
+    "counters": [
+      "wu_gong",
+      "tao_yuan_dun"
+    ],
+    "counteredBy": [
+      "qun_gong",
+      "san_shi_lu"
+    ],
     "ratings": {
       "output": 65,
       "recover": 70,
@@ -61,12 +75,21 @@
     "id": "sima_yi_dun",
     "name": "司马懿盾",
     "tier": "T0",
-    "tags": ["打架", "PVP", "高红度要求", "魏盾"],
-    "generalIds": ["sima_yi", "cao_cao", "hao_zhao"],
+    "tags": [
+      "打架",
+      "PVP",
+      "高红度要求",
+      "魏盾"
+    ],
+    "generalIds": [
+      "sima_yi",
+      "cao_cao",
+      "zhang_he"
+    ],
     "generalRedLevels": {
       "sima_yi": 0,
       "cao_cao": 0,
-      "hao_zhao": 0
+      "zhang_he": 0
     },
     "troop": "shield",
     "skills": {
@@ -79,10 +102,10 @@
       },
       "vice": {
         "cao_cao": [
-          "jian_jia_ling_yu",
+          "bing_feng",
           "jie_li_zuo_mou"
         ],
-        "hao_zhao": [
+        "zhang_he": [
           "huo_chi_yuan_liao",
           "heng_sao_qian_jun"
         ]
@@ -102,8 +125,14 @@
     },
     "equippedTraitIds": [],
     "description": "司马懿主将持续法伤,曹操分担伤害提供增伤,郝昭辅助补伤,魏国法盾代表。八卦阵克制谋略伤害,提升队伍稳定性。",
-    "counters": ["shu_qiang", "wu_hu_qiang"],
-    "counteredBy": ["wu_gong", "dong_wu_da_du_du"],
+    "counters": [
+      "shu_qiang",
+      "wu_hu_qiang"
+    ],
+    "counteredBy": [
+      "wu_gong",
+      "dong_wu_da_du_du"
+    ],
     "ratings": {
       "output": 55,
       "recover": 60,
@@ -119,8 +148,17 @@
     "id": "wei_qi",
     "name": "魏骑",
     "tier": "T1",
-    "tags": ["打架", "PVP", "骑兵", "魏国"],
-    "generalIds": ["cao_cao", "zhang_liao", "xiahou_dun"],
+    "tags": [
+      "打架",
+      "PVP",
+      "骑兵",
+      "魏国"
+    ],
+    "generalIds": [
+      "cao_cao",
+      "zhang_liao",
+      "xiahou_dun"
+    ],
     "generalRedLevels": {
       "cao_cao": 0,
       "zhang_liao": 0,
@@ -131,7 +169,7 @@
       "main": {
         "cao_cao": [
           "feng_shi_zhen",
-          "jian_jia_ling_yu",
+          "chen_mu_heng_mao",
           "yi_xin_zhao_yong"
         ]
       },
@@ -160,8 +198,14 @@
     },
     "equippedTraitIds": [],
     "description": "曹操主将增伤,张辽夏侯惇双输出,锋矢阵主将增伤副将分担,经典魏国菜刀队。",
-    "counters": ["tao_yuan_dun", "wu_qi"],
-    "counteredBy": ["wu_gong", "sima_yi_dun"],
+    "counters": [
+      "tao_yuan_dun",
+      "wu_qi"
+    ],
+    "counteredBy": [
+      "wu_gong",
+      "sima_yi_dun"
+    ],
     "ratings": {
       "output": 75,
       "recover": 50,
@@ -177,20 +221,29 @@
     "id": "wu_mou_chen",
     "name": "五谋臣",
     "tier": "T1",
-    "tags": ["打架", "PVP", "控制", "魏智"],
-    "generalIds": ["xun_yu", "guo_jia", "cheng_yu"],
+    "tags": [
+      "打架",
+      "PVP",
+      "控制",
+      "魏智"
+    ],
+    "generalIds": [
+      "cao_cao",
+      "guo_jia",
+      "sima_yi"
+    ],
     "generalRedLevels": {
-      "xun_yu": 0,
+      "cao_cao": 0,
       "guo_jia": 0,
-      "cheng_yu": 0
+      "sima_yi": 0
     },
     "troop": "archer",
     "skills": {
       "main": {
-        "xun_yu": [
+        "cao_cao": [
           "wu_feng_zhen",
           "yi_qi_li_ci",
-          "shen_feng_ju_ran"
+          "wan_ren_zhi_di"
         ]
       },
       "vice": {
@@ -198,7 +251,7 @@
           "huo_chi_yuan_liao",
           "kong_cheng_ji"
         ],
-        "cheng_yu": [
+        "sima_yi": [
           "shi_bie_san_ri",
           "jie_li_zuo_mou"
         ]
@@ -218,8 +271,14 @@
     },
     "equippedTraitIds": [],
     "description": "荀彧主将增伤,郭嘉程昱双谋略输出,武峰阵分担伤害,主打控制与持续法伤。",
-    "counters": ["shu_zhi", "jiang_wei_qiang"],
-    "counteredBy": ["san_shi_lu", "sima_yi_dun"],
+    "counters": [
+      "shu_zhi",
+      "jiang_wei_qiang"
+    ],
+    "counteredBy": [
+      "san_shi_lu",
+      "sima_yi_dun"
+    ],
     "ratings": {
       "output": 65,
       "recover": 50,
@@ -235,12 +294,21 @@
     "id": "shu_zhi",
     "name": "蜀智",
     "tier": "T0",
-    "tags": ["打架", "PVP", "高红度要求", "蜀智"],
-    "generalIds": ["zhuge_liang", "pang_tong", "xu_shu"],
+    "tags": [
+      "打架",
+      "PVP",
+      "高红度要求",
+      "蜀智"
+    ],
+    "generalIds": [
+      "zhuge_liang",
+      "pang_tong",
+      "fa_zheng"
+    ],
     "generalRedLevels": {
       "zhuge_liang": 0,
       "pang_tong": 0,
-      "xu_shu": 0
+      "fa_zheng": 0
     },
     "troop": "archer",
     "skills": {
@@ -248,15 +316,15 @@
         "zhuge_liang": [
           "ba_gua_zhen",
           "kong_cheng_ji",
-          "yi_qin_zhao_yong"
+          "yi_xin_zhao_yong"
         ]
       },
       "vice": {
         "pang_tong": [
-          "lian_huo_zhi_xin",
+          "kong_cheng_ji",
           "huo_chi_yuan_liao"
         ],
-        "xu_shu": [
+        "fa_zheng": [
           "shi_bie_san_ri",
           "jie_li_zuo_mou"
         ]
@@ -276,8 +344,14 @@
     },
     "equippedTraitIds": [],
     "description": "诸葛亮主将法伤+控制,庞统徐庶双输出,八卦阵提升谋略打击面与减伤,蜀国法师队代表。",
-    "counters": ["sima_yi_dun", "zhang_jiao_dun"],
-    "counteredBy": ["wu_mou_chen", "qun_gong"],
+    "counters": [
+      "sima_yi_dun",
+      "zhang_jiao_dun"
+    ],
+    "counteredBy": [
+      "wu_mou_chen",
+      "qun_gong"
+    ],
     "ratings": {
       "output": 60,
       "recover": 50,
@@ -293,8 +367,17 @@
     "id": "wu_hu_qiang",
     "name": "五虎枪",
     "tier": "T1",
-    "tags": ["打架", "PVP", "输出", "蜀枪"],
-    "generalIds": ["zhao_yun", "zhang_fei", "ma_chao"],
+    "tags": [
+      "打架",
+      "PVP",
+      "输出",
+      "蜀枪"
+    ],
+    "generalIds": [
+      "zhao_yun",
+      "zhang_fei",
+      "ma_chao"
+    ],
     "generalRedLevels": {
       "zhao_yun": 0,
       "zhang_fei": 0,
@@ -334,8 +417,14 @@
     },
     "equippedTraitIds": [],
     "description": "赵云主将连击+闪避,张飞马超双武力输出,武峰阵分担伤害,五虎上将三人版枪兵。",
-    "counters": ["qun_xiong_qi", "wei_qi"],
-    "counteredBy": ["sima_yi_dun", "wu_gong"],
+    "counters": [
+      "qun_xiong_qi",
+      "wei_qi"
+    ],
+    "counteredBy": [
+      "sima_yi_dun",
+      "wu_gong"
+    ],
     "ratings": {
       "output": 80,
       "recover": 45,
@@ -351,8 +440,16 @@
     "id": "jiang_wei_qiang",
     "name": "姜维枪",
     "tier": "T2",
-    "tags": ["打架", "PVP", "蜀枪"],
-    "generalIds": ["jiang_wei", "wei_yan", "guan_ping"],
+    "tags": [
+      "打架",
+      "PVP",
+      "蜀枪"
+    ],
+    "generalIds": [
+      "jiang_wei",
+      "wei_yan",
+      "guan_ping"
+    ],
     "generalRedLevels": {
       "jiang_wei": 0,
       "wei_yan": 0,
@@ -392,8 +489,14 @@
     },
     "equippedTraitIds": [],
     "description": "姜维主将文武双全输出,魏延关平副将补刀,八卦阵提升智谋打击面,蜀国中坚枪兵。",
-    "counters": ["tao_yuan_dun", "wu_qi"],
-    "counteredBy": ["wu_mou_chen", "shu_zhi"],
+    "counters": [
+      "tao_yuan_dun",
+      "wu_qi"
+    ],
+    "counteredBy": [
+      "wu_mou_chen",
+      "shu_zhi"
+    ],
     "ratings": {
       "output": 70,
       "recover": 50,
@@ -409,8 +512,17 @@
     "id": "wu_gong",
     "name": "吴弓",
     "tier": "T0",
-    "tags": ["打架", "PVP", "高红度要求", "吴弓"],
-    "generalIds": ["zhou_yu", "tai_shi_ci", "gan_ning"],
+    "tags": [
+      "打架",
+      "PVP",
+      "高红度要求",
+      "吴弓"
+    ],
+    "generalIds": [
+      "zhou_yu",
+      "tai_shi_ci",
+      "gan_ning"
+    ],
     "generalRedLevels": {
       "zhou_yu": 0,
       "tai_shi_ci": 0,
@@ -421,17 +533,17 @@
       "main": {
         "zhou_yu": [
           "ba_gua_zhen",
-          "shen_feng_ju_ran",
+          "jie_li_zuo_mou",
           "huo_chi_yuan_liao"
         ]
       },
       "vice": {
         "tai_shi_ci": [
-          "tian_shi_xun_lie",
+          "heng_sao_qian_jun",
           "heng_sao_qian_jun"
         ],
         "gan_ning": [
-          "qiang_xi_xi_jun",
+          "bao_lian_si_fang",
           "bing_feng"
         ]
       }
@@ -450,8 +562,14 @@
     },
     "equippedTraitIds": [],
     "description": "周瑜主将群体谋略+灼烧,太史慈甘宁双武力输出,八卦阵提升谋略打击面,吴弓代表队。",
-    "counters": ["sima_yi_dun", "zhang_jiao_dun"],
-    "counteredBy": ["shu_qiang", "san_shi_lu"],
+    "counters": [
+      "sima_yi_dun",
+      "zhang_jiao_dun"
+    ],
+    "counteredBy": [
+      "shu_qiang",
+      "san_shi_lu"
+    ],
     "ratings": {
       "output": 80,
       "recover": 45,
@@ -467,8 +585,17 @@
     "id": "dong_wu_da_du_du",
     "name": "东吴大都督",
     "tier": "T1",
-    "tags": ["打架", "PVP", "谋略", "吴弓"],
-    "generalIds": ["zhou_yu", "lu_xun", "lu_su"],
+    "tags": [
+      "打架",
+      "PVP",
+      "谋略",
+      "吴弓"
+    ],
+    "generalIds": [
+      "zhou_yu",
+      "lu_xun",
+      "lu_su"
+    ],
     "generalRedLevels": {
       "zhou_yu": 0,
       "lu_xun": 0,
@@ -479,13 +606,13 @@
       "main": {
         "zhou_yu": [
           "ba_gua_zhen",
-          "shen_feng_ju_ran",
+          "jie_li_zuo_mou",
           "huo_chi_yuan_liao"
         ]
       },
       "vice": {
         "lu_xun": [
-          "lian_huo_zhi_xin",
+          "kong_cheng_ji",
           "kong_cheng_ji"
         ],
         "lu_su": [
@@ -508,8 +635,14 @@
     },
     "equippedTraitIds": [],
     "description": "周瑜主将,陆逊鲁肃双副将,八卦阵提升智谋打击面与减伤,吴国都督队法伤组合。",
-    "counters": ["sima_yi_dun", "shu_zhi"],
-    "counteredBy": ["san_shi_lu", "qun_gong"],
+    "counters": [
+      "sima_yi_dun",
+      "shu_zhi"
+    ],
+    "counteredBy": [
+      "san_shi_lu",
+      "qun_gong"
+    ],
     "ratings": {
       "output": 65,
       "recover": 50,
@@ -525,8 +658,17 @@
     "id": "wu_qi",
     "name": "孙权骑",
     "tier": "T1",
-    "tags": ["打架", "PVP", "吴骑", "输出"],
-    "generalIds": ["sun_quan", "zhou_tai", "gan_ning"],
+    "tags": [
+      "打架",
+      "PVP",
+      "吴骑",
+      "输出"
+    ],
+    "generalIds": [
+      "sun_quan",
+      "zhou_tai",
+      "gan_ning"
+    ],
     "generalRedLevels": {
       "sun_quan": 0,
       "zhou_tai": 0,
@@ -537,17 +679,17 @@
       "main": {
         "sun_quan": [
           "feng_shi_zhen",
-          "jian_xiong_zhen",
+          "ba_men_jin_suo_zhen",
           "yi_xin_zhao_yong"
         ]
       },
       "vice": {
         "zhou_tai": [
-          "bu_qu_shi_qu",
+          "xiao_yong_wu_pi",
           "heng_sao_qian_jun"
         ],
         "gan_ning": [
-          "qiang_xi_xi_jun",
+          "bao_lian_si_fang",
           "bing_feng"
         ]
       }
@@ -566,8 +708,14 @@
     },
     "equippedTraitIds": [],
     "description": "孙权主将增益,周泰甘宁副将输出,锋矢阵主将增伤副将分担,西凉铁骑骑兵菜刀。",
-    "counters": ["tao_yuan_dun", "shu_qiang"],
-    "counteredBy": ["wu_gong", "sima_yi_dun"],
+    "counters": [
+      "tao_yuan_dun",
+      "shu_qiang"
+    ],
+    "counteredBy": [
+      "wu_gong",
+      "sima_yi_dun"
+    ],
     "ratings": {
       "output": 75,
       "recover": 50,
@@ -583,8 +731,17 @@
     "id": "san_shi_lu",
     "name": "三势吕",
     "tier": "T0",
-    "tags": ["打架", "PVP", "高红度要求", "群骑"],
-    "generalIds": ["lv_bu", "chen_gong", "hua_tuo"],
+    "tags": [
+      "打架",
+      "PVP",
+      "高红度要求",
+      "群骑"
+    ],
+    "generalIds": [
+      "lv_bu",
+      "chen_gong",
+      "hua_tuo"
+    ],
     "generalRedLevels": {
       "lv_bu": 0,
       "chen_gong": 0,
@@ -595,13 +752,13 @@
       "main": {
         "lv_bu": [
           "da_yan_zhen",
-          "wu_guo_zhong_li",
+          "chen_mu_heng_mao",
           "po_zhen_cui_jian"
         ]
       },
       "vice": {
         "chen_gong": [
-          "shen_feng_ju_ran",
+          "jie_li_zuo_mou",
           "kong_cheng_ji"
         ],
         "hua_tuo": [
@@ -624,8 +781,14 @@
     },
     "equippedTraitIds": [],
     "description": "吕布主将无双爆发,陈宫华佗副将辅助,大雁阵副将先手减伤主将增伤,群雄菜刀队。",
-    "counters": ["wu_gong", "shu_qiang"],
-    "counteredBy": ["sima_yi_dun", "tao_yuan_dun"],
+    "counters": [
+      "wu_gong",
+      "shu_qiang"
+    ],
+    "counteredBy": [
+      "sima_yi_dun",
+      "tao_yuan_dun"
+    ],
     "ratings": {
       "output": 85,
       "recover": 45,
@@ -641,8 +804,17 @@
     "id": "qun_gong",
     "name": "群弓",
     "tier": "T2",
-    "tags": ["打架", "PVP", "群弓", "控制"],
-    "generalIds": ["dong_zhuo", "lv_bu", "diao_chan"],
+    "tags": [
+      "打架",
+      "PVP",
+      "群弓",
+      "控制"
+    ],
+    "generalIds": [
+      "dong_zhuo",
+      "lv_bu",
+      "diao_chan"
+    ],
     "generalRedLevels": {
       "dong_zhuo": 0,
       "lv_bu": 0,
@@ -653,17 +825,17 @@
       "main": {
         "dong_zhuo": [
           "wu_feng_zhen",
-          "jian_jia_ling_yu",
+          "chen_mu_heng_mao",
           "yi_xin_zhao_yong"
         ]
       },
       "vice": {
         "lv_bu": [
-          "wu_guo_zhong_li",
+          "chen_mu_heng_mao",
           "heng_sao_qian_jun"
         ],
         "diao_chan": [
-          "li_guo_li_min",
+          "gui_shen_mo_ce",
           "kong_cheng_ji"
         ]
       }
@@ -682,8 +854,14 @@
     },
     "equippedTraitIds": [],
     "description": "董卓主将增伤+坦克,吕布副将输出,貂蝉控制,武峰阵分担伤害,群雄混合弓。",
-    "counters": ["shu_zhi", "dong_wu_da_du_du"],
-    "counteredBy": ["san_shi_lu", "wu_hu_qiang"],
+    "counters": [
+      "shu_zhi",
+      "dong_wu_da_du_du"
+    ],
+    "counteredBy": [
+      "san_shi_lu",
+      "wu_hu_qiang"
+    ],
     "ratings": {
       "output": 60,
       "recover": 50,
@@ -699,8 +877,17 @@
     "id": "qun_xiong_qi",
     "name": "群雄骑",
     "tier": "T1",
-    "tags": ["打架", "PVP", "群骑", "辅助"],
-    "generalIds": ["lv_bu", "zuo_ci", "hua_tuo"],
+    "tags": [
+      "打架",
+      "PVP",
+      "群骑",
+      "辅助"
+    ],
+    "generalIds": [
+      "lv_bu",
+      "zuo_ci",
+      "hua_tuo"
+    ],
     "generalRedLevels": {
       "lv_bu": 0,
       "zuo_ci": 0,
@@ -711,7 +898,7 @@
       "main": {
         "lv_bu": [
           "da_yan_zhen",
-          "wu_guo_zhong_li",
+          "chen_mu_heng_mao",
           "po_zhen_cui_jian"
         ]
       },
@@ -722,7 +909,7 @@
         ],
         "hua_tuo": [
           "gua_gu_liao_du",
-          "shen_feng_ju_ran"
+          "jie_li_zuo_mou"
         ]
       }
     },
@@ -740,8 +927,14 @@
     },
     "equippedTraitIds": [],
     "description": "吕布主将输出,左慈华佗双辅助治疗+增伤,大雁阵副将先手减伤主将增伤,群雄骑兵菜刀。",
-    "counters": ["shu_qiang", "wu_qi"],
-    "counteredBy": ["wu_hu_qiang", "sima_yi_dun"],
+    "counters": [
+      "shu_qiang",
+      "wu_qi"
+    ],
+    "counteredBy": [
+      "wu_hu_qiang",
+      "sima_yi_dun"
+    ],
     "ratings": {
       "output": 70,
       "recover": 65,
@@ -757,8 +950,17 @@
     "id": "zhang_jiao_dun",
     "name": "张角盾",
     "tier": "T1",
-    "tags": ["打架", "PVP", "群盾", "法伤"],
-    "generalIds": ["zhang_jiao", "yu_ji", "zuo_ci"],
+    "tags": [
+      "打架",
+      "PVP",
+      "群盾",
+      "法伤"
+    ],
+    "generalIds": [
+      "zhang_jiao",
+      "yu_ji",
+      "zuo_ci"
+    ],
     "generalRedLevels": {
       "zhang_jiao": 0,
       "yu_ji": 0,
@@ -798,8 +1000,14 @@
     },
     "equippedTraitIds": [],
     "description": "张角主将雷击+太平道法,于吉左慈副将法伤与治疗,武峰阵分担伤害,群盾法师。",
-    "counters": ["shu_qiang", "tao_yuan_dun"],
-    "counteredBy": ["wu_gong", "shu_zhi"],
+    "counters": [
+      "shu_qiang",
+      "tao_yuan_dun"
+    ],
+    "counteredBy": [
+      "wu_gong",
+      "shu_zhi"
+    ],
     "ratings": {
       "output": 60,
       "recover": 70,
@@ -815,8 +1023,18 @@
     "id": "tao_yuan_dun",
     "name": "桃园盾",
     "tier": "T1",
-    "tags": ["打架", "PVP", "桃园", "坦克", "经典阵容"],
-    "generalIds": ["liu_bei", "guan_yu", "zhang_fei"],
+    "tags": [
+      "打架",
+      "PVP",
+      "桃园",
+      "坦克",
+      "经典阵容"
+    ],
+    "generalIds": [
+      "liu_bei",
+      "guan_yu",
+      "zhang_fei"
+    ],
     "generalRedLevels": {
       "liu_bei": 0,
       "guan_yu": 0,
@@ -856,8 +1074,14 @@
     },
     "equippedTraitIds": [],
     "description": "桃园三兄弟盾兵版,刘备主将治疗+刮骨,关羽张飞副将输出,武峰阵分担伤害,坦克续航强。",
-    "counters": ["san_shi_lu", "qun_xiong_qi"],
-    "counteredBy": ["shu_qiang", "sima_yi_dun"],
+    "counters": [
+      "san_shi_lu",
+      "qun_xiong_qi"
+    ],
+    "counteredBy": [
+      "shu_qiang",
+      "sima_yi_dun"
+    ],
     "ratings": {
       "output": 55,
       "recover": 80,
